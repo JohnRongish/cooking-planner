@@ -1,7 +1,6 @@
 # Event Kitchen Planner: Specification (draft for approval)
 
-Status: DRAFT v0.2. Awaiting user approval before PLAN.md or any code.
-Open-question answers so far: Q1 (US customary display default) APPROVED.
+Status: APPROVED v1.0 (all five open questions accepted with the stated defaults).
 
 ## 1. Purpose
 
