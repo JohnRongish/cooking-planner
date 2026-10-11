@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass, field
+from fractions import Fraction
 from pathlib import Path
 
 from planner.core import units as u
@@ -60,16 +62,23 @@ class RecipeSheetsData:
     sheets: list[Sheet] = field(default_factory=list)
 
 
-def _amount(plan: Plan, amount: object, unit: str) -> str:
-    from fractions import Fraction
+def _amount(plan: Plan, amount: Fraction, unit: str) -> str:
+    """Cook-friendly display rounding; the exact value is never used for buying.
 
-    assert isinstance(amount, Fraction)
+    Counts round up to whole items, weights to a tenth, volumes to the nearest 1/8.
+    """
     base_amt, family = u.to_base(amount, unit)
-    if unit == "pinch" or u.is_count(family):
+    if u.is_count(family):
+        return u.format_quantity(Fraction(math.ceil(amount)), unit)
+    if unit == "pinch":
         return u.format_quantity(amount, unit)
     system = "metric" if unit in _METRIC else plan.settings.units
     h_amt, h_unit = u.humanize(base_amt, family, system)
-    return u.format_quantity(h_amt, h_unit)
+    step = Fraction(1, 10) if family == u.MASS else Fraction(1, 8)
+    rounded = u.round_nearest(h_amt, step)
+    if rounded == 0:
+        rounded = step
+    return u.format_quantity(rounded, h_unit)
 
 
 def _ingredient_row(plan: Plan, pr: PlannedRecipe, ln: ScaledLine) -> SheetIngredient:
@@ -108,8 +117,9 @@ def _sheet(plan: Plan, pr: PlannedRecipe) -> Sheet:
             when = f"{plan.clock.describe(first)} to {plan.clock.tod(last_end)}"
         inst = next((s.instance for s in sched if s.instance.step_id == st.id), None)
         batch_note = ""
-        if n > 1 and st.is_per_batch:
-            batch_note = f"Do this for each of the {n} batches"
+        n_step = pr.batch.batches_for(st.id)
+        if n_step > 1:
+            batch_note = f"Do this for each of the {n_step} batches"
             if not st.can_parallelize_batches:
                 batch_note += ", one after another"
         hold = ""

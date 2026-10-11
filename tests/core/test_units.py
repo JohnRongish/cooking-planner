@@ -160,6 +160,8 @@ def test_format_quantity_plural():
     assert u.format_quantity(F(1), "cup") == "1 cup"
     assert u.format_quantity(F(2), "cup") == "2 cups"
     assert u.format_quantity(F(3), "clove") == "3 cloves"
+    assert u.format_quantity(F(1, 2), "cup") == "1/2 cup"
+    assert u.format_quantity(F(3, 2), "cup") == "1 1/2 cups"
     assert str(u.Quantity(F(1, 2), "tsp")) == "1/2 tsp"
 
 
@@ -186,3 +188,10 @@ def test_ceil_helpers():
     assert u.ceil_to(F(5, 3), F(1, 2)) == 2
     assert u.ceil_to(F(2), F(1, 2)) == 2
     assert u.ceil_fraction(F(7, 3)) == 3
+
+
+def test_round_nearest_and_floor():
+    assert u.round_nearest(F(5, 3), F(1, 8)) == F(13, 8)
+    assert u.round_nearest(F(1, 16), F(1, 8)) == F(1, 8)  # halves go up
+    assert u.floor_to(F(5, 3), F(1, 2)) == F(3, 2)
+    assert u.floor_to(F(1, 100), F(1)) == 0

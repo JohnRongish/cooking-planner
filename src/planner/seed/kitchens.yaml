@@ -1,0 +1,43 @@
+schema_version: 1
+kind: kitchens
+kitchens:
+  - id: backpacking
+    name: Backpacking (1 stove, 1 pot)
+    description: One canister stove, one 3 L pot, one cook. No ovens, no fridge.
+    equipment_inventory:
+      - {type: burner, count: 1, label: Canister stove}
+      - {type: pot, count: 1, capacity: 3, label: 3 L pot}
+    max_cooks: 1
+    supports_tags: [backpacking, no-cook, one-pot]
+    work_start: "05:30"
+    work_end: "22:00"
+  - id: camp-kitchen
+    name: Camp kitchen (2 ovens, 6 burners, large pots)
+    description: Fixed camp kitchen. Pot capacity is litres, oven capacity is sheet pans.
+    equipment_inventory:
+      - {type: oven, count: 2, capacity: 6, label: Convection oven (6 sheet pans)}
+      - {type: burner, count: 6}
+      - {type: pot, count: 2, capacity: 40, label: 40 L stock pot}
+      - {type: pot, count: 3, capacity: 20, label: 20 L pot}
+      - {type: pan, count: 4, capacity: 5, label: Large sauté pan}
+      - {type: prep_table, count: 3}
+      - {type: fridge, count: 4, label: Walk-in shelf bay}
+    max_cooks: 8
+    supports_tags: [bulk, camp, no-cook, one-pot, breakfast, lunch, dinner, vegetarian]
+    work_start: "05:30"
+    work_end: "22:00"
+  - id: home-kitchen
+    name: Home kitchen
+    description: Typical home kitchen, one or two cooks.
+    equipment_inventory:
+      - {type: oven, count: 1, capacity: 2, label: Oven (2 sheet pans)}
+      - {type: burner, count: 4}
+      - {type: pot, count: 1, capacity: 12, label: 12 L stock pot}
+      - {type: pot, count: 2, capacity: 4, label: 4 L saucepan}
+      - {type: pan, count: 2, capacity: 3}
+      - {type: prep_table, count: 1}
+      - {type: fridge, count: 2}
+    max_cooks: 2
+    supports_tags: [bulk, no-cook, one-pot, breakfast, lunch, dinner, vegetarian]
+    work_start: "06:00"
+    work_end: "22:00"

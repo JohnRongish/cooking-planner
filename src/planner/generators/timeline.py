@@ -17,6 +17,8 @@ from planner.generators import base
 class TimelineRow:
     start: str
     end: str
+    start_t: str  # time of day, for tables already grouped by day
+    end_t: str
     day: int
     title: str
     recipe: str
@@ -82,6 +84,12 @@ def _row(plan: Plan, s: ScheduledStep) -> TimelineRow:
     return TimelineRow(
         start=plan.clock.describe(s.start),
         end=plan.clock.describe(s.end),
+        start_t=plan.clock.tod(s.start),
+        end_t=(
+            plan.clock.tod(s.end)
+            if plan.clock.day_of(s.end) == plan.clock.day_of(s.start)
+            else plan.clock.describe(s.end)
+        ),
         day=plan.clock.day_of(s.start),
         title=i.title,
         recipe=i.recipe_name,

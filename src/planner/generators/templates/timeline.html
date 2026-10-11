@@ -3,7 +3,7 @@
   <p class="meta">{{ plan.event.name }} &middot; kitchen: {{ plan.kitchen.name }}</p>
   {% if data.conflicts %}
   <div class="conflicts">
-    <strong>CONFLICTS: this plan needs more than the kitchen has</strong>
+    <strong class="banner-src">CONFLICTS: this plan needs more than the kitchen has</strong>
     <ul>{% for c in data.conflicts %}<li>{{ c }}</li>{% endfor %}</ul>
   </div>
   {% endif %}
@@ -14,15 +14,15 @@
   {% endif %}
   <h3 class="view-title">By day</h3>
   {% for day in data.days %}
-  <div class="day page-break-before">
+  <div class="day{% if not loop.first %} page-break-before{% endif %}">
     <h3>{{ day.label }}</h3>
     <table class="tl">
-      <thead><tr><th class="chk"></th><th>Start</th><th>End</th><th>What</th><th>For</th><th>Equipment / station</th></tr></thead>
+      <thead><tr><th class="chk"></th><th class="time">Start</th><th class="time">End</th><th>What</th><th>For</th><th>Equipment / station</th></tr></thead>
       <tbody>
       {% for r in day.rows %}
         <tr class="{{ 'conflict' if r.conflict else '' }}">
           <td class="chk"><span class="box"></span></td>
-          <td>{{ r.start }}</td><td>{{ r.end }}</td>
+          <td class="time">{{ r.start_t }}</td><td class="time">{{ r.end_t }}</td>
           <td><strong>{{ r.title }}</strong>{% if r.batch %} <small>({{ r.batch }})</small>{% endif %}
               <br><small>{{ r.recipe }} &middot; {{ r.duration }} min{% if r.active != r.duration %}, {{ r.active }} hands-on{% endif %}</small>
               {% for f in r.flags %}<br><small class="flag">&#9888; {{ f }}</small>{% endfor %}</td>
@@ -44,7 +44,7 @@
       <tbody>
       {% for r in sd.rows %}
         <tr class="{{ 'conflict' if r.conflict else '' }}">
-          <td>{{ r.start }} &ndash; {{ r.end }}</td>
+          <td class="time">{{ r.start_t }} &ndash; {{ r.end_t }}</td>
           <td>{{ r.title }} <small>{{ r.recipe }}{% if r.batch %}, {{ r.batch }}{% endif %}</small></td>
         </tr>
       {% endfor %}

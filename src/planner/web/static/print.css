@@ -1,0 +1,48 @@
+/* Print-first styles. Shared by the on-screen preview, the print view, and PDF export. */
+@page {
+  size: __PAGE__;
+  margin: 0.6in 0.55in 0.7in 0.55in;
+  @top-center { content: string(banner); font: 700 8.5pt sans-serif; color: #b00020; }
+  @bottom-left { content: string(doc-title); font: 8pt sans-serif; color: #555; }
+  @bottom-right { content: "Page " counter(page) " of " counter(pages); font: 8pt sans-serif; color: #555; }
+}
+:root { --ink: #1a1a1a; --muted: #555; --line: #bbb; --alert: #b00020; --hint: #8a5a00; }
+* { box-sizing: border-box; }
+body.doc { font: 10.5pt/1.35 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color: var(--ink); margin: 0; }
+h2 { font-size: 15pt; margin: 0 0 4pt; string-set: doc-title content(); }
+h3 { font-size: 12pt; margin: 12pt 0 4pt; }
+h4 { font-size: 10.5pt; margin: 8pt 0 2pt; }
+.meta { color: var(--muted); margin: 0 0 8pt; }
+small { color: var(--muted); font-size: 8.5pt; }
+table { border-collapse: collapse; width: 100%; margin: 4pt 0 10pt; }
+caption { break-after: avoid; text-align: left; font-weight: 700; font-size: 12pt; padding: 6pt 0 3pt; text-transform: capitalize; }
+th, td { border-bottom: 0.5pt solid var(--line); padding: 3pt 5pt; text-align: left; vertical-align: top; }
+th { font-size: 8.5pt; text-transform: uppercase; letter-spacing: .03em; color: var(--muted); border-bottom: 1pt solid #666; }
+tr { break-inside: avoid; }
+thead { display: table-header-group; }
+td.chk, th.chk { width: 18pt; }
+.box { display: inline-block; width: 11pt; height: 11pt; border: 1pt solid #333; border-radius: 2pt; vertical-align: middle; }
+.page-break-before { break-before: page; }
+.timeline .day:first-of-type { break-before: auto; }
+.banner-src { string-set: banner "CONFLICTS: this plan needs more equipment or people than the kitchen has (see page 1)"; }
+.gen > .page-break-before:first-child { break-before: auto; }
+.avoid-break { break-inside: avoid; }
+.warn { color: var(--hint); margin: 2pt 0; font-weight: 600; }
+.conflicts { border: 2pt solid var(--alert); background: #fdecee; padding: 6pt 10pt; margin: 6pt 0 10pt; color: #5c0011; }
+.conflicts strong { color: var(--alert); font-size: 12pt; letter-spacing: .02em; }
+.hints { border: 1pt solid #d8b25a; background: #fff8e6; padding: 4pt 10pt; margin: 6pt 0 10pt; }
+.hints ul, .conflicts ul { margin: 3pt 0 3pt 14pt; padding: 0; }
+tr.conflict td { background: #fdecee; }
+.flag { color: var(--alert); font-weight: 600; }
+.footer-note { margin-top: 14pt; padding-top: 6pt; border-top: 0.5pt solid var(--line); color: var(--muted); font-size: 8.5pt; }
+.view-title { margin-top: 14pt; border-bottom: 1.5pt solid #333; }
+.tl.small td { font-size: 9pt; padding: 2pt 5pt; }
+.station h3 { margin-bottom: 0; }
+ol.method { padding-left: 16pt; }
+ol.method li { margin: 0 0 5pt; break-inside: avoid; }
+.sheet .batch { font-size: 12pt; margin: 4pt 0 6pt; }
+.sheet h2 { border-bottom: 1.5pt solid #333; padding-bottom: 2pt; }
+
+td.time, th.time { white-space: nowrap; }
+table.shop td:nth-child(3), table.shop td:nth-child(4), table.shop td:nth-child(6) { white-space: nowrap; }
+table.shop td:nth-child(2) { min-width: 1.4in; }

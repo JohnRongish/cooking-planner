@@ -195,6 +195,12 @@ def schedule(
     conflict_msgs: dict[str, list[str]] = {}
     warnings: list[PlanWarning] = []
 
+    max_cooks = kitchen.max_cooks
+
+    def cooks_of(i: StepInstance) -> int:
+        """Cooks a step uses, never more than the kitchen has (duration is not stretched)."""
+        return i.cooks if max_cooks is None else min(i.cooks, max_cooks)
+
     def label(i: StepInstance) -> str:
         who = labels.get(i.meal_index)
         return f"{who}: {i.recipe_name} - {i.title}" if who else f"{i.recipe_name} - {i.title}"
@@ -245,8 +251,8 @@ def schedule(
             v = res.first_violation(s, s + i.duration, d.count, d.min_capacity)
             if v is not None:
                 return d.type, v[0], v[1], v[2], v[3]
-        if cook_res is not None and i.cooks > 0 and i.active > 0:
-            v = cook_res.first_violation(s, s + i.active, i.cooks, Fraction(0))
+        if cook_res is not None and cooks_of(i) > 0 and i.active > 0:
+            v = cook_res.first_violation(s, s + i.active, cooks_of(i), Fraction(0))
             if v is not None:
                 return COOK, v[0], v[1], v[2], v[3]
         return None
@@ -264,8 +270,6 @@ def schedule(
                         f"the largest is smaller"
                     )
                 return f"needs {d.count} {_plural(d.type, d.count)} but only {have} exist"
-        if cook_res is not None and i.cooks > len(cook_res.caps):
-            return f"needs {i.cooks} cooks but max_cooks is {len(cook_res.caps)}"
         return None
 
     while heap:
@@ -332,8 +336,8 @@ def schedule(
         e = chosen + i.duration
         for d in i.demands:
             resources[d.type].book(chosen, e, d.count, d.min_capacity, k)
-        if cook_res is not None and i.cooks > 0 and i.active > 0:
-            cook_res.book(chosen, chosen + i.active, i.cooks, Fraction(0), k)
+        if cook_res is not None and cooks_of(i) > 0 and i.active > 0:
+            cook_res.book(chosen, chosen + i.active, cooks_of(i), Fraction(0), k)
         placed[k] = (chosen, e)
         for d_key in i.deps:
             latest_end[d_key] = min(latest_end[d_key], chosen)
@@ -342,6 +346,21 @@ def schedule(
                 heapq.heappush(heap, (prio(d_key), d_key))
 
     # --- result assembly
+    seen_clamp: set[tuple[int, int, str]] = set()
+    for i in inst:
+        if max_cooks is not None and i.cooks > max_cooks:
+            ident = (i.meal_index, i.position, i.step_id)
+            if ident not in seen_clamp:
+                seen_clamp.add(ident)
+                warnings.append(
+                    PlanWarning(
+                        "info",
+                        "cooks_clamped",
+                        f"{label(i)} is planned for {i.cooks} cooks but the kitchen has "
+                        f"{max_cooks}; it will take longer than shown.",
+                        i.meal_index,
+                    )
+                )
     flags: dict[str, list[str]] = {k: list(v) for k, v in conflict_msgs.items() if v}
     for k in sorted(conflict_msgs):
         i = by_key[k]

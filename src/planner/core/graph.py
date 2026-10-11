@@ -6,6 +6,7 @@ Shared steps appear once and wait for every batch copy they depend on.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass
 from fractions import Fraction
 
@@ -70,26 +71,27 @@ def expand_recipe(
     recipe: Recipe,
     *,
     servings: Fraction,
-    n_batches: int,
+    batch_counts: Mapping[str, int],
     meal_index: int,
     position: int,
     serve_minute: int,
     meal_day: int,
 ) -> list[StepInstance]:
-    """Build step instances for one planned recipe of ``servings`` servings."""
+    """Build step instances for one planned recipe of ``servings`` servings.
+
+    ``batch_counts`` maps each per-batch step id to its number of copies (see
+    ``BatchPlan.step_batches``); other steps appear once.
+    """
     prefix = f"m{meal_index}p{position}:{recipe.id}"
     by_id = {s.id: s for s in recipe.steps}
-    batch_servings = servings / n_batches
 
-    def copies(step: Step) -> list[int | None]:
-        if n_batches > 1 and step.is_per_batch:
-            return list(range(1, n_batches + 1))
-        return [None]
+    def n_of(step: Step) -> int:
+        return batch_counts.get(step.id, 1) if step.is_per_batch else 1
 
     out: list[StepInstance] = []
     for step in recipe.steps:
-        per_batch = n_batches > 1 and step.is_per_batch
-        scale = (batch_servings if per_batch else servings) / recipe.base_servings
+        n = n_of(step)
+        scale = (servings / n) / recipe.base_servings
         duration = scale_minutes(step.duration_min, step.time_scaling, scale)
         active = min(duration, scale_minutes(step.active, step.time_scaling, scale))
         demands = tuple(
@@ -100,17 +102,17 @@ def expand_recipe(
             )
             for e in step.equipment
         )
-        for batch in copies(step):
+        copies: list[int | None] = list(range(1, n + 1)) if n > 1 else [None]
+        for batch in copies:
             deps: list[str] = []
             for d in step.depends_on:
-                dstep = by_id[d]
-                if n_batches > 1 and dstep.is_per_batch:
-                    if batch is not None:
-                        deps.append(_key(prefix, d, batch))
-                    else:
-                        deps.extend(_key(prefix, d, b) for b in range(1, n_batches + 1))
-                else:
+                n_d = n_of(by_id[d])
+                if n_d == 1:
                     deps.append(_key(prefix, d, None))
+                elif batch is not None and n_d == n:
+                    deps.append(_key(prefix, d, batch))
+                else:
+                    deps.extend(_key(prefix, d, b) for b in range(1, n_d + 1))
             if batch is not None and batch > 1 and not step.can_parallelize_batches:
                 deps.append(_key(prefix, step.id, batch - 1))
             out.append(
@@ -124,7 +126,7 @@ def expand_recipe(
                     title=step.title,
                     instructions=step.instructions,
                     batch=batch,
-                    n_batches=n_batches if batch is not None else 1,
+                    n_batches=n,
                     duration=duration,
                     active=active,
                     cooks=_cooks(step, active),

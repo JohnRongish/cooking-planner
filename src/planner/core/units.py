@@ -49,7 +49,7 @@ class Unit:
     plural: str = ""
 
     def label(self, amount: Fraction) -> str:
-        if amount == 1 or not self.plural:
+        if amount <= 1 or not self.plural:
             return self.name
         return self.plural
 
@@ -298,6 +298,16 @@ def ceil_fraction(x: Fraction) -> int:
 def ceil_to(x: Fraction, step: Fraction) -> Fraction:
     """Round ``x`` up to a multiple of ``step``."""
     return Fraction(math.ceil(x / step)) * step
+
+
+def round_nearest(x: Fraction, step: Fraction) -> Fraction:
+    """Round ``x`` to the nearest multiple of ``step`` (halves go up)."""
+    return Fraction(math.floor(x / step + Fraction(1, 2))) * step
+
+
+def floor_to(x: Fraction, step: Fraction) -> Fraction:
+    """Round ``x`` down to a multiple of ``step``."""
+    return Fraction(math.floor(x / step)) * step
 
 
 _NICE = [Fraction(n, d) for d in (2, 3, 4, 8) for n in range(1, d)]

@@ -272,7 +272,7 @@ def test_station_assignment_names_units():
 def test_graph_validation():
     r = recipe(steps=[step("a", 5), step("b", 5, depends_on=["a"])])
     inst = expand_recipe(
-        r, servings=F(10), n_batches=1, meal_index=0, position=0, serve_minute=0, meal_day=0
+        r, servings=F(10), batch_counts={}, meal_index=0, position=0, serve_minute=0, meal_day=0
     )
     validate_graph(inst)
     import dataclasses

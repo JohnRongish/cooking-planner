@@ -244,12 +244,10 @@ def build_shopping(plan: Plan) -> ShoppingData:
                     pantry_base=pantry_base,
                     packs=choice,
                     needed=u.format_base(needed, fam, system),
-                    to_buy=_to_buy_text(net, fam, choice, system),
-                    pantry=u.format_base(pantry_base, fam, system) if pantry_base > 0 else "",
-                    pack_text=_pack_text(choice, fam, system),
-                    leftover=u.format_base(choice.leftover, fam, system)
-                    if choice and choice.leftover > 0
-                    else "",
+                    to_buy=_to_buy_text(net, fam, system),
+                    pantry=_round_down_text(pantry_base, fam, system) if pantry_base > 0 else "",
+                    pack_text=_pack_text(choice),
+                    leftover=_round_down_text(choice.leftover, fam, system) if choice else "",
                     used_in=used,
                     notes=tuple(notes),
                 )
@@ -272,25 +270,31 @@ def build_shopping(plan: Plan) -> ShoppingData:
     return data
 
 
-def _to_buy_text(net: Fraction, family: str, choice: PackChoice | None, system: str) -> str:
-    if net <= 0:
-        return "none (covered by pantry)"
-    if choice is not None:
-        return u.format_base(choice.total - choice.leftover, family, system)
-    # No pack data: round up to a friendly step so the number is usable at the store
-    amount, unit = u.humanize(net, family, system)
+def _round_up_text(amount_base: Fraction, family: str, system: str) -> str:
+    """Friendly 'buy at least this much' text: rounded *up* to a whole count or 1/8 unit."""
+    amount, unit = u.humanize(amount_base, family, system)
     step = Fraction(1) if u.is_count(family) else Fraction(1, 8)
     return u.format_quantity(u.ceil_to(amount, step), unit)
 
 
-def _pack_text(choice: PackChoice | None, family: str, system: str) -> str:
+def _round_down_text(amount_base: Fraction, family: str, system: str) -> str:
+    """Leftover text rounded *down*; empty when it is less than the smallest step."""
+    amount, unit = u.humanize(amount_base, family, system)
+    step = Fraction(1) if u.is_count(family) else Fraction(1, 8)
+    rounded = u.floor_to(amount, step)
+    return u.format_quantity(rounded, unit) if rounded > 0 else ""
+
+
+def _to_buy_text(net: Fraction, family: str, system: str) -> str:
+    if net <= 0:
+        return "none (covered by pantry)"
+    return _round_up_text(net, family, system)
+
+
+def _pack_text(choice: PackChoice | None) -> str:
     if choice is None:
         return ""
-    parts = [
-        f"{count} x {label} ({u.format_base(size, family, system)})"
-        for label, count, size in choice.counts
-    ]
-    return " + ".join(parts)
+    return " + ".join(f"{count} x {label}" for label, count, _size in choice.counts)
 
 
 def shopping_csv(data: ShoppingData) -> str:

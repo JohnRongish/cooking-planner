@@ -1,0 +1,366 @@
+schema_version: 1
+kind: recipes
+recipes:
+  # ------------------------------------------------------------------ bulk
+  - id: chili
+    name: Beef chili
+    description: Classic beef and kidney bean chili, thick enough for a bowl or a baked potato.
+    tags: [bulk, one-pot, dinner, camp]
+    base_servings: 10
+    portion_basis: 1 1/2 cups
+    scaling_notes: Salt to taste at the end; large pots need longer to come back to a simmer.
+    source: house recipe
+    variants: {vegetarian: three-bean-chili}
+    ingredients:
+      - {ingredient_id: ground-beef, quantity: 3, unit: lb}
+      - {ingredient_id: onion, quantity: 1.5, unit: lb, prep_note: diced}
+      - {ingredient_id: bell-pepper, quantity: 1, unit: lb, prep_note: diced}
+      - {ingredient_id: garlic, quantity: 6, unit: clove, prep_note: minced}
+      - {ingredient_id: kidney-beans, quantity: 2.5, unit: lb, prep_note: drained}
+      - {ingredient_id: crushed-tomatoes, quantity: 4, unit: lb}
+      - {ingredient_id: tomato-paste, quantity: 6, unit: oz}
+      - {ingredient_id: chili-powder, quantity: 3, unit: tbsp}
+      - {ingredient_id: cumin, quantity: 1, unit: tbsp}
+      - {ingredient_id: salt, quantity: 2, unit: tsp}
+      - {ingredient_id: vegetable-oil, quantity: 2, unit: tbsp}
+      - {ingredient_id: bay-leaf, quantity: 2, unit: each, scaling: fixed}
+    steps:
+      - {id: chop, title: "Dice onions and peppers, mince garlic", duration_min: 30, time_scaling: sqrt,
+         cooks: 2, equipment: [{type: prep_table}]}
+      - {id: brown, title: "Brown the beef with onions", instructions: "Break up the meat; drain if very fatty.",
+         duration_min: 25, time_scaling: sqrt, depends_on: [chop],
+         equipment: [{type: burner}, {type: pot, capacity_hint: 3}], cooked: true}
+      - {id: simmer, title: "Add the rest and simmer", instructions: "Stir every 15 minutes. Remove bay leaves.",
+         duration_min: 90, active_min: 15, time_scaling: sqrt, depends_on: [brown],
+         equipment: [{type: burner}, {type: pot, capacity_hint: 3}], cooked: true}
+      - {id: serve, title: "Hold hot and serve", duration_min: 15, depends_on: [simmer],
+         hold: {min_temp_f: 140, max_minutes: 180}}
+
+  - id: three-bean-chili
+    name: Three-bean chili (vegetarian)
+    description: Vegetarian chili built on kidney and black beans and corn.
+    tags: [bulk, one-pot, dinner, camp, vegetarian, vegan]
+    diets: [vegetarian, vegan, gluten_free]
+    base_servings: 10
+    portion_basis: 1 1/2 cups
+    ingredients:
+      - {ingredient_id: onion, quantity: 1.5, unit: lb, prep_note: diced}
+      - {ingredient_id: bell-pepper, quantity: 1, unit: lb, prep_note: diced}
+      - {ingredient_id: garlic, quantity: 6, unit: clove, prep_note: minced}
+      - {ingredient_id: kidney-beans, quantity: 2, unit: lb, prep_note: drained}
+      - {ingredient_id: black-beans, quantity: 2, unit: lb, prep_note: drained}
+      - {ingredient_id: frozen-corn, quantity: 1, unit: lb}
+      - {ingredient_id: crushed-tomatoes, quantity: 4, unit: lb}
+      - {ingredient_id: tomato-paste, quantity: 6, unit: oz}
+      - {ingredient_id: chili-powder, quantity: 3, unit: tbsp}
+      - {ingredient_id: cumin, quantity: 1, unit: tbsp}
+      - {ingredient_id: salt, quantity: 2, unit: tsp}
+      - {ingredient_id: vegetable-oil, quantity: 2, unit: tbsp}
+    steps:
+      - {id: chop, title: "Dice onions and peppers, mince garlic", duration_min: 25, time_scaling: sqrt,
+         cooks: 2, equipment: [{type: prep_table}]}
+      - {id: sweat, title: "Sweat the vegetables", duration_min: 20, time_scaling: sqrt, depends_on: [chop],
+         equipment: [{type: burner}, {type: pot, capacity_hint: 3}]}
+      - {id: simmer, title: "Add beans and tomatoes and simmer", duration_min: 60, active_min: 10,
+         time_scaling: sqrt, depends_on: [sweat], cooked: true,
+         equipment: [{type: burner}, {type: pot, capacity_hint: 3}]}
+      - {id: serve, title: "Hold hot and serve", duration_min: 15, depends_on: [simmer],
+         hold: {min_temp_f: 140, max_minutes: 180}}
+
+  - id: cornbread
+    name: Skillet-style cornbread
+    description: Sheet-pan cornbread. Keeps well; bake it the day before if the ovens are busy.
+    tags: [bulk, baked, vegetarian, side, make-ahead]
+    diets: [vegetarian]
+    base_servings: 12
+    portion_basis: 1 square
+    scaling_notes: One half-sheet pan per 12 squares.
+    ingredients:
+      - {ingredient_id: cornmeal, quantity: 1.5, unit: cup}
+      - {ingredient_id: flour, quantity: 1.5, unit: cup}
+      - {ingredient_id: sugar, quantity: 1/2, unit: cup}
+      - {ingredient_id: baking-powder, quantity: 1, unit: tbsp}
+      - {ingredient_id: salt, quantity: 1, unit: tsp}
+      - {ingredient_id: milk, quantity: 1.5, unit: cup}
+      - {ingredient_id: eggs, quantity: 2, unit: each, scaling: stepped}
+      - {ingredient_id: vegetable-oil, quantity: 1/2, unit: cup}
+    steps:
+      - {id: mix, title: "Mix batter", instructions: "Combine dry, then wet; do not overmix.",
+         duration_min: 15, time_scaling: sqrt, cooks: 2, equipment: [{type: prep_table}]}
+      - {id: bake, title: "Bake at 400 F", duration_min: 25, active_min: 5, depends_on: [mix],
+         earliest_offset: 2880, equipment: [{type: oven, capacity_hint: 1}]}
+      - {id: cool, title: "Cool and cut into squares", duration_min: 20, active_min: 10,
+         time_scaling: sqrt, depends_on: [bake], equipment: [{type: prep_table}]}
+
+  - id: breakfast-burritos
+    name: Breakfast burritos
+    description: Scrambled eggs, roasted potatoes, peppers, black beans and cheese in a flour tortilla.
+    tags: [bulk, breakfast, vegetarian, camp]
+    diets: [vegetarian]
+    base_servings: 10
+    portion_basis: 1 burrito
+    max_batch_servings: 60
+    ingredients:
+      - {ingredient_id: eggs, quantity: 20, unit: each, scaling: stepped}
+      - {ingredient_id: flour-tortilla, quantity: 10, unit: each, scaling: stepped}
+      - {ingredient_id: cheddar, quantity: 1.5, unit: lb}
+      - {ingredient_id: potato, quantity: 2, unit: lb, prep_note: small dice}
+      - {ingredient_id: bell-pepper, quantity: 1, unit: lb, prep_note: diced}
+      - {ingredient_id: onion, quantity: 3/4, unit: lb, prep_note: diced}
+      - {ingredient_id: black-beans, quantity: 1.5, unit: lb, prep_note: drained}
+      - {ingredient_id: salsa, quantity: 1.5, unit: lb}
+      - {ingredient_id: vegetable-oil, quantity: 1/4, unit: cup}
+      - {ingredient_id: salt, quantity: 2, unit: tsp}
+      - {ingredient_id: cumin, quantity: 1, unit: tsp}
+    steps:
+      - {id: chop, title: "Dice potatoes, peppers and onions", instructions: "Hold diced vegetables in covered, chilled tubs.",
+         duration_min: 30, time_scaling: sqrt, cooks: 3, day_offset: -1, equipment: [{type: prep_table}]}
+      - {id: roast, title: "Roast potato mix on sheet pans", instructions: "425 F until tender.",
+         duration_min: 25, active_min: 5, depends_on: [chop], per_batch: true,
+         equipment: [{type: oven, capacity_hint: 1}]}
+      - {id: scramble, title: "Scramble eggs in large pans", instructions: "Cook soft; eggs finish in the hold.",
+         duration_min: 12, depends_on: [chop], cooked: true,
+         equipment: [{type: burner}, {type: pan, capacity_hint: 1}]}
+      - {id: assemble, title: "Fill and roll burritos", duration_min: 15, time_scaling: sqrt, cooks: 4,
+         depends_on: [roast, scramble], equipment: [{type: prep_table, count: 2}], cooked: true}
+      - {id: hold, title: "Wrap and hold hot for serving", duration_min: 10, depends_on: [assemble],
+         hold: {min_temp_f: 140, max_minutes: 120}}
+
+  - id: pasta-meatballs
+    name: Spaghetti with marinara and meatballs
+    description: Make-ahead marinara, baked meatballs, spaghetti boiled in batches.
+    tags: [bulk, dinner, camp]
+    base_servings: 10
+    portion_basis: 1 1/2 cups pasta, 3 meatballs
+    variants: {vegetarian: pasta-marinara}
+    scaling_notes: Sauce is made and chilled the day before and reheated. Boil pasta last.
+    ingredients:
+      - {ingredient_id: ground-beef, quantity: 3, unit: lb}
+      - {ingredient_id: breadcrumbs, quantity: 1.5, unit: cup}
+      - {ingredient_id: eggs, quantity: 3, unit: each, scaling: stepped}
+      - {ingredient_id: parmesan, quantity: 3/4, unit: cup}
+      - {ingredient_id: milk, quantity: 1/2, unit: cup}
+      - {ingredient_id: italian-seasoning, quantity: 1, unit: tbsp}
+      - {ingredient_id: salt, quantity: 2, unit: tsp}
+      - {ingredient_id: spaghetti, quantity: 2.5, unit: lb}
+      - {ingredient_id: crushed-tomatoes, quantity: 5, unit: lb}
+      - {ingredient_id: onion, quantity: 1, unit: lb, prep_note: diced}
+      - {ingredient_id: garlic, quantity: 6, unit: clove, prep_note: minced}
+      - {ingredient_id: vegetable-oil, quantity: 3, unit: tbsp}
+      - {ingredient_id: sugar, quantity: 1, unit: tbsp}
+      - {ingredient_id: dried-basil, quantity: 1, unit: tbsp}
+    steps:
+      - {id: sauce, title: "Make marinara", duration_min: 60, active_min: 20, time_scaling: sqrt,
+         day_offset: -1, cooked: true, equipment: [{type: burner}, {type: pot, capacity_hint: 3.5}]}
+      - {id: chill-sauce, title: "Cool and refrigerate sauce", duration_min: 120, active_min: 20,
+         depends_on: [sauce], day_offset: -1, cooked: true, hold: {max_temp_f: 40}, equipment: [{type: fridge}]}
+      - {id: mix, title: "Mix meatball mixture", duration_min: 20, time_scaling: sqrt, cooks: 2,
+         equipment: [{type: prep_table}]}
+      - {id: shape, title: "Shape meatballs onto sheet pans", duration_min: 40, time_scaling: sqrt, cooks: 3,
+         depends_on: [mix], equipment: [{type: prep_table, count: 2}]}
+      - {id: bake, title: "Bake meatballs at 400 F", duration_min: 25, active_min: 5, depends_on: [shape],
+         cooked: true, equipment: [{type: oven, capacity_hint: 2}]}
+      - {id: reheat, title: "Reheat marinara", duration_min: 40, active_min: 10, time_scaling: sqrt,
+         depends_on: [chill-sauce], cooked: true, equipment: [{type: burner}, {type: pot, capacity_hint: 3.5}]}
+      - {id: boil, title: "Boil spaghetti", instructions: "Salted water; cook 1 minute short of al dente.",
+         duration_min: 25, active_min: 10, cooked: true,
+         equipment: [{type: burner}, {type: pot, capacity_hint: 6}]}
+      - {id: serve, title: "Combine and hold hot", duration_min: 20, depends_on: [bake, reheat, boil],
+         hold: {min_temp_f: 140, max_minutes: 120}}
+
+  - id: pasta-marinara
+    name: Spaghetti with marinara (vegetarian)
+    tags: [bulk, dinner, camp, vegetarian, vegan]
+    diets: [vegetarian, vegan]
+    base_servings: 10
+    portion_basis: 1 1/2 cups pasta
+    ingredients:
+      - {ingredient_id: spaghetti, quantity: 2.5, unit: lb}
+      - {ingredient_id: crushed-tomatoes, quantity: 5, unit: lb}
+      - {ingredient_id: onion, quantity: 1, unit: lb, prep_note: diced}
+      - {ingredient_id: garlic, quantity: 6, unit: clove, prep_note: minced}
+      - {ingredient_id: vegetable-oil, quantity: 3, unit: tbsp}
+      - {ingredient_id: sugar, quantity: 1, unit: tbsp}
+      - {ingredient_id: dried-basil, quantity: 1, unit: tbsp}
+      - {ingredient_id: salt, quantity: 2, unit: tsp}
+    steps:
+      - {id: sauce, title: "Make marinara", duration_min: 60, active_min: 20, time_scaling: sqrt,
+         day_offset: -1, cooked: true, equipment: [{type: burner}, {type: pot, capacity_hint: 3.5}]}
+      - {id: chill-sauce, title: "Cool and refrigerate sauce", duration_min: 120, active_min: 20,
+         depends_on: [sauce], day_offset: -1, cooked: true, hold: {max_temp_f: 40}, equipment: [{type: fridge}]}
+      - {id: reheat, title: "Reheat marinara", duration_min: 40, active_min: 10, time_scaling: sqrt,
+         depends_on: [chill-sauce], cooked: true, equipment: [{type: burner}, {type: pot, capacity_hint: 3.5}]}
+      - {id: boil, title: "Boil spaghetti", duration_min: 25, active_min: 10, cooked: true,
+         equipment: [{type: burner}, {type: pot, capacity_hint: 6}]}
+      - {id: serve, title: "Combine and hold hot", duration_min: 20, depends_on: [reheat, boil],
+         hold: {min_temp_f: 140, max_minutes: 120}}
+
+  - id: roasted-vegetables
+    name: Sheet-pan roasted vegetables
+    description: Potatoes, carrots, zucchini and onion roasted with rosemary.
+    tags: [bulk, side, vegetarian, vegan, gluten-free]
+    diets: [vegetarian, vegan, gluten_free]
+    base_servings: 10
+    portion_basis: 1 cup
+    scaling_notes: Do not crowd the pans; 3 pans per 10 servings.
+    ingredients:
+      - {ingredient_id: potato, quantity: 3, unit: lb, prep_note: 1 inch dice}
+      - {ingredient_id: carrot, quantity: 2, unit: lb, prep_note: 1/2 inch coins}
+      - {ingredient_id: zucchini, quantity: 1.5, unit: lb, prep_note: half-moons}
+      - {ingredient_id: onion, quantity: 1, unit: lb, prep_note: wedges}
+      - {ingredient_id: vegetable-oil, quantity: 1/4, unit: cup}
+      - {ingredient_id: salt, quantity: 2, unit: tsp}
+      - {ingredient_id: black-pepper, quantity: 1, unit: tsp}
+      - {ingredient_id: rosemary, quantity: 1, unit: tbsp}
+    steps:
+      - {id: chop, title: "Wash and cut vegetables", instructions: "Hold in covered, chilled tubs.",
+         duration_min: 45, time_scaling: sqrt, cooks: 2, day_offset: -1, equipment: [{type: prep_table}]}
+      - {id: toss, title: "Toss with oil and seasoning onto sheet pans", duration_min: 20,
+         time_scaling: sqrt, cooks: 2, depends_on: [chop], equipment: [{type: prep_table}]}
+      - {id: roast, title: "Roast at 425 F", instructions: "Rotate pans halfway.",
+         duration_min: 40, active_min: 5, depends_on: [toss], cooked: true,
+         equipment: [{type: oven, capacity_hint: 3}]}
+      - {id: serve, title: "Pan out and hold hot", duration_min: 10, depends_on: [roast],
+         hold: {min_temp_f: 140, max_minutes: 120}}
+
+  - id: sandwich-bar
+    name: Sandwich bar
+    description: Build-your-own sandwiches. No cooking.
+    tags: [bulk, no-cook, lunch, cold, camp]
+    diets: [vegetarian]
+    base_servings: 10
+    portion_basis: 1 sandwich
+    scaling_notes: Cheese, lettuce, tomato and pickles let vegetarians build a full sandwich.
+    ingredients:
+      - {ingredient_id: sandwich-bread, quantity: 20, unit: slice, scaling: stepped, step_size: 20}
+      - {ingredient_id: deli-turkey, quantity: 1.5, unit: lb}
+      - {ingredient_id: deli-ham, quantity: 1.5, unit: lb}
+      - {ingredient_id: sliced-cheese, quantity: 1, unit: lb}
+      - {ingredient_id: lettuce, quantity: 1, unit: head, scaling: stepped}
+      - {ingredient_id: tomato, quantity: 1.5, unit: lb}
+      - {ingredient_id: pickles, quantity: 1, unit: lb}
+      - {ingredient_id: mayo, quantity: 1/2, unit: cup}
+      - {ingredient_id: mustard, quantity: 1/4, unit: cup}
+    steps:
+      - {id: prep, title: "Slice tomatoes, wash and tear lettuce, portion meats and cheese",
+         duration_min: 45, time_scaling: sqrt, cooks: 3, equipment: [{type: prep_table}]}
+      - {id: chill, title: "Chill toppings in the walk-in", duration_min: 60, active_min: 0,
+         depends_on: [prep], equipment: [{type: fridge}]}
+      - {id: setup, title: "Set out the bar on ice", duration_min: 20, cooks: 2, depends_on: [chill],
+         hold: {max_temp_f: 41, max_minutes: 240}}
+
+  # ------------------------------------------------- backpacking-and-bulk
+  - id: oatmeal
+    name: Oatmeal with add-ins
+    description: Rolled oats with brown sugar, raisins and cinnamon. One pot.
+    tags: [backpacking, bulk, one-pot, breakfast, vegetarian, vegan]
+    diets: [vegetarian, vegan]
+    base_servings: 4
+    portion_basis: 1 cup
+    scaling_notes: Use 1 part oats to 2 parts boiling water (the water is not on the shopping list).
+    ingredients:
+      - {ingredient_id: rolled-oats, quantity: 2, unit: cup}
+      - {ingredient_id: brown-sugar, quantity: 1/4, unit: cup}
+      - {ingredient_id: raisins, quantity: 1/2, unit: cup}
+      - {ingredient_id: cinnamon, quantity: 1, unit: tsp}
+      - {ingredient_id: salt, quantity: 1/4, unit: tsp}
+    steps:
+      - {id: boil, title: "Bring water to a boil", instructions: "About 4 cups of water per 2 cups of oats.",
+         duration_min: 10, active_min: 3, time_scaling: sqrt,
+         equipment: [{type: burner}, {type: pot, capacity_hint: 1.5}]}
+      - {id: cook, title: "Stir in oats and simmer", duration_min: 8, active_min: 8, depends_on: [boil],
+         equipment: [{type: burner}, {type: pot, capacity_hint: 1.5}], cooked: true}
+      - {id: serve, title: "Add sugar, raisins and cinnamon; serve", duration_min: 10, cooks: 2,
+         depends_on: [cook]}
+
+  - id: couscous-veg
+    name: Couscous with dehydrated vegetables
+    description: Just-add-boiling-water dinner for the trail.
+    tags: [backpacking, bulk, one-pot, dinner, vegetarian, vegan]
+    diets: [vegetarian, vegan]
+    base_servings: 4
+    portion_basis: 1 1/2 cups
+    ingredients:
+      - {ingredient_id: couscous, quantity: 1.5, unit: cup}
+      - {ingredient_id: dehydrated-veg, quantity: 1/2, unit: cup}
+      - {ingredient_id: vegetable-oil, quantity: 1, unit: tbsp}
+      - {ingredient_id: cumin, quantity: 1/2, unit: tsp}
+      - {ingredient_id: salt, quantity: 1/2, unit: tsp}
+    steps:
+      - {id: boil, title: "Boil water", instructions: "Roughly 2 cups of water for the couscous and 1 cup for the vegetables.",
+         duration_min: 10, active_min: 3, time_scaling: sqrt,
+         equipment: [{type: burner}, {type: pot, capacity_hint: 2}]}
+      - {id: steep, title: "Add everything, cover, and steep", duration_min: 12, active_min: 2, depends_on: [boil],
+         equipment: [{type: pot, capacity_hint: 2}], cooked: true}
+      - {id: fluff, title: "Fluff and serve", duration_min: 5, depends_on: [steep]}
+
+  - id: pb-wraps
+    name: Peanut butter tortilla wraps
+    description: Tortilla, peanut butter, honey, banana and raisins. No cooking.
+    tags: [backpacking, bulk, no-cook, lunch, snack, vegetarian, vegan]
+    diets: [vegetarian, vegan]
+    variants: {nut_free: sunbutter-wraps}
+    base_servings: 2
+    portion_basis: 1 wrap
+    ingredients:
+      - {ingredient_id: flour-tortilla, quantity: 2, unit: each, scaling: stepped}
+      - {ingredient_id: peanut-butter, quantity: 1/4, unit: cup}
+      - {ingredient_id: honey, quantity: 1, unit: tbsp}
+      - {ingredient_id: banana, quantity: 1, unit: each, scaling: stepped}
+      - {ingredient_id: raisins, quantity: 2, unit: tbsp}
+    steps:
+      - {id: assemble, title: "Spread, layer and roll the wraps", duration_min: 10, time_scaling: sqrt,
+         cooks: 2}
+
+  - id: sunbutter-wraps
+    name: Sunflower butter tortilla wraps (nut-free)
+    tags: [bulk, no-cook, snack, vegetarian, vegan, nut-free]
+    diets: [vegetarian, vegan, nut_free]
+    base_servings: 2
+    portion_basis: 1 wrap
+    ingredients:
+      - {ingredient_id: flour-tortilla, quantity: 2, unit: each, scaling: stepped}
+      - {ingredient_id: sunflower-butter, quantity: 1/4, unit: cup}
+      - {ingredient_id: honey, quantity: 1, unit: tbsp}
+      - {ingredient_id: banana, quantity: 1, unit: each, scaling: stepped}
+      - {ingredient_id: raisins, quantity: 2, unit: tbsp}
+    steps:
+      - {id: assemble, title: "Spread, layer and roll the wraps (clean surface and gloves)", duration_min: 10,
+         time_scaling: sqrt, cooks: 2}
+
+  # ----------------------------------------------------------- batch-split
+  - id: minestrone
+    name: Minestrone
+    description: Vegetable and bean soup with small pasta. Needs batching in a big kitchen.
+    tags: [bulk, one-pot, soup, lunch, vegetarian, vegan, camp]
+    diets: [vegetarian, vegan]
+    base_servings: 10
+    portion_basis: 1 1/2 cups
+    max_batch_servings: 50
+    scaling_notes: Never fill a pot past three quarters. Add the pasta only when serving time is near.
+    ingredients:
+      - {ingredient_id: onion, quantity: 1.5, unit: lb, prep_note: diced}
+      - {ingredient_id: carrot, quantity: 1.5, unit: lb, prep_note: diced}
+      - {ingredient_id: celery, quantity: 1, unit: head, prep_note: diced, scaling: stepped}
+      - {ingredient_id: garlic, quantity: 6, unit: clove, prep_note: minced}
+      - {ingredient_id: zucchini, quantity: 1, unit: lb, prep_note: diced}
+      - {ingredient_id: kidney-beans, quantity: 2, unit: lb, prep_note: drained}
+      - {ingredient_id: crushed-tomatoes, quantity: 3, unit: lb}
+      - {ingredient_id: vegetable-broth, quantity: 3/4, unit: gal}
+      - {ingredient_id: ditalini, quantity: 1, unit: lb}
+      - {ingredient_id: italian-seasoning, quantity: 1, unit: tbsp}
+      - {ingredient_id: salt, quantity: 1, unit: tbsp}
+      - {ingredient_id: vegetable-oil, quantity: 3, unit: tbsp}
+      - {ingredient_id: bay-leaf, quantity: 2, unit: each, scaling: fixed}
+    steps:
+      - {id: chop, title: "Dice all the vegetables", duration_min: 40, time_scaling: sqrt, cooks: 2,
+         equipment: [{type: prep_table}]}
+      - {id: saute, title: "Saute onions, carrots, celery and garlic", duration_min: 20, time_scaling: sqrt,
+         depends_on: [chop], equipment: [{type: burner}, {type: pot, capacity_hint: 2.5}]}
+      - {id: simmer, title: "Add broth, tomatoes and beans; simmer", duration_min: 45, active_min: 10,
+         time_scaling: sqrt, depends_on: [saute], cooked: true,
+         equipment: [{type: burner}, {type: pot, capacity_hint: 2.5}]}
+      - {id: pasta, title: "Add zucchini and ditalini; cook until tender", duration_min: 15, active_min: 5,
+         depends_on: [simmer], cooked: true, equipment: [{type: burner}, {type: pot, capacity_hint: 2.5}]}
+      - {id: serve, title: "Hold hot and serve", duration_min: 15, depends_on: [pasta],
+         hold: {min_temp_f: 140, max_minutes: 180}}

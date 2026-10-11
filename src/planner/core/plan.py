@@ -285,7 +285,7 @@ def build_plan(
                 expand_recipe(
                     pr.recipe,
                     servings=pr.servings,
-                    n_batches=pr.batch.n_batches,
+                    batch_counts=pr.batch.step_batches,
                     meal_index=mi,
                     position=pr.position,
                     serve_minute=serve_minute,
@@ -371,4 +371,10 @@ def safety_warnings(
                         i.meal_index,
                     )
                 )
-    return out
+    seen: set[str] = set()
+    unique: list[PlanWarning] = []
+    for w in out:  # batch copies of a step produce identical hints
+        if w.message not in seen:
+            seen.add(w.message)
+            unique.append(w)
+    return unique

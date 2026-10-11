@@ -1,0 +1,38 @@
+schema_version: 1
+kind: events
+events:
+  - id: fall-camp-weekend
+    name: Fall Camp Weekend (120 people)
+    kitchen_profile_id: camp-kitchen
+    start_date: 2025-10-10
+    days: 3
+    notes: Youth group camp. 12 vegetarians, 5 peanut allergies. Ovens are shared with the lodge.
+    pantry_on_hand:
+      - {ingredient_id: salt, quantity: 2, unit: lb}
+      - {ingredient_id: vegetable-oil, quantity: 1, unit: qt}
+      - {ingredient_id: sugar, quantity: 4, unit: lb}
+    meals:
+      - {day: 0, label: dinner, serve_time: "18:00", recipe_ids: [chili, cornbread], headcount: 120,
+         diet_splits: {vegetarian: 12}, portion_factor: 1}
+      - {day: 1, label: breakfast, serve_time: "07:30", recipe_ids: [breakfast-burritos], headcount: 120,
+         portion_factor: 1}
+      - {day: 1, label: lunch, serve_time: "12:00", recipe_ids: [sandwich-bar], headcount: 120,
+         portion_factor: 1.25}
+      - {day: 1, label: snack, serve_time: "15:30", recipe_ids: [pb-wraps], headcount: 120,
+         diet_splits: {nut_free: 5}, portion_factor: 0.5}
+      - {day: 1, label: dinner, serve_time: "18:30", recipe_ids: [pasta-meatballs, roasted-vegetables],
+         headcount: 120, diet_splits: {vegetarian: 12}, portion_factor: 1}
+      - {day: 2, label: breakfast, serve_time: "08:00", recipe_ids: [oatmeal], headcount: 120,
+         portion_factor: 1}
+      - {day: 2, label: lunch, serve_time: "12:30", recipe_ids: [minestrone, cornbread], headcount: 120,
+         portion_factor: 1}
+  - id: backpacking-trip
+    name: Weekend backpacking trip (6 people)
+    kitchen_profile_id: backpacking
+    start_date: 2025-07-18
+    days: 2
+    notes: One stove, one pot. Everything fits in a bear canister.
+    meals:
+      - {day: 0, label: dinner, serve_time: "19:00", recipe_ids: [couscous-veg], headcount: 6}
+      - {day: 1, label: breakfast, serve_time: "07:00", recipe_ids: [oatmeal], headcount: 6}
+      - {day: 1, label: lunch, serve_time: "12:30", recipe_ids: [pb-wraps], headcount: 6}

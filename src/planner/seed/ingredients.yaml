@@ -1,0 +1,178 @@
+schema_version: 1
+kind: ingredients
+ingredients:
+  # ---- produce
+  - {id: onion, name: Yellow onion, store_section: produce, density_g_per_ml: 0.65, trim_yield: 0.9,
+     purchase_packs: [{label: 50 lb sack, size: 50, unit: lb}, {label: 10 lb bag, size: 10, unit: lb}],
+     diet_flags: [vegan, gluten_free]}
+  - {id: bell-pepper, name: Bell pepper, store_section: produce, trim_yield: 0.8,
+     purchase_packs: [{label: 11 lb case, size: 11, unit: lb}, {label: 1 lb pack, size: 1, unit: lb}],
+     diet_flags: [vegan, gluten_free]}
+  - {id: carrot, name: Carrot, store_section: produce, trim_yield: 0.85,
+     purchase_packs: [{label: 50 lb sack, size: 50, unit: lb}, {label: 5 lb bag, size: 5, unit: lb}],
+     diet_flags: [vegan, gluten_free]}
+  - {id: celery, name: Celery, store_section: produce, trim_yield: 0.75,
+     purchase_packs: [{label: 24 ct case, size: 24, unit: head}, {label: bunch, size: 1, unit: head}],
+     diet_flags: [vegan, gluten_free]}
+  - {id: potato, name: Russet potato, store_section: produce, trim_yield: 0.85,
+     purchase_packs: [{label: 50 lb sack, size: 50, unit: lb}, {label: 10 lb bag, size: 10, unit: lb}],
+     diet_flags: [vegan, gluten_free]}
+  - {id: zucchini, name: Zucchini, store_section: produce, trim_yield: 0.9,
+     purchase_packs: [{label: 20 lb case, size: 20, unit: lb}, {label: 2 lb pack, size: 2, unit: lb}],
+     diet_flags: [vegan, gluten_free]}
+  - {id: garlic, name: Garlic, store_section: produce, trim_yield: 0.85,
+     purchase_packs: [{label: 3 lb bag of heads (about 180 cloves), size: 180, unit: clove},
+                      {label: head (about 10 cloves), size: 10, unit: clove}],
+     diet_flags: [vegan, gluten_free]}
+  - {id: tomato, name: Fresh tomato, store_section: produce, trim_yield: 0.95,
+     purchase_packs: [{label: 25 lb case, size: 25, unit: lb}, {label: 5 lb flat, size: 5, unit: lb}],
+     diet_flags: [vegan, gluten_free]}
+  - {id: lettuce, name: Romaine lettuce, store_section: produce, trim_yield: 0.8,
+     purchase_packs: [{label: 24 ct case, size: 24, unit: head}, {label: head, size: 1, unit: head}],
+     diet_flags: [vegan, gluten_free]}
+  - {id: banana, name: Banana, store_section: produce, trim_yield: 0.65,
+     purchase_packs: [{label: 40 lb case (about 150), size: 150, unit: each}, {label: bunch of 6, size: 6, unit: each}],
+     diet_flags: [vegan, gluten_free]}
+  # ---- meat
+  - {id: ground-beef, name: Ground beef 80/20, store_section: meat,
+     purchase_packs: [{label: 10 lb chub, size: 10, unit: lb}, {label: 5 lb chub, size: 5, unit: lb}],
+     diet_flags: [gluten_free]}
+  - {id: deli-turkey, name: Deli turkey, store_section: meat,
+     purchase_packs: [{label: 10 lb log, size: 10, unit: lb}, {label: 3 lb log, size: 3, unit: lb}],
+     diet_flags: [gluten_free]}
+  - {id: deli-ham, name: Deli ham, store_section: meat,
+     purchase_packs: [{label: 10 lb log, size: 10, unit: lb}, {label: 3 lb log, size: 3, unit: lb}],
+     diet_flags: [gluten_free]}
+  # ---- dairy
+  - {id: eggs, name: Large eggs, store_section: dairy, allergens: [egg],
+     purchase_packs: [{label: 15 dozen case, size: 180, unit: each}, {label: 18 ct flat, size: 18, unit: each}],
+     diet_flags: [vegetarian, gluten_free]}
+  - {id: milk, name: Whole milk, store_section: dairy, density_g_per_ml: 1.03, allergens: [milk],
+     purchase_packs: [{label: 1 gal jug, size: 1, unit: gal}, {label: 1 qt carton, size: 1, unit: qt}],
+     diet_flags: [vegetarian, gluten_free]}
+  - {id: cheddar, name: Shredded cheddar, store_section: dairy, density_g_per_ml: 0.45, allergens: [milk],
+     purchase_packs: [{label: 5 lb bag, size: 5, unit: lb}, {label: 2 lb bag, size: 2, unit: lb}],
+     diet_flags: [vegetarian, gluten_free]}
+  - {id: sliced-cheese, name: Sliced cheese, store_section: dairy, allergens: [milk],
+     purchase_packs: [{label: 5 lb brick, size: 5, unit: lb}, {label: 1 lb pack, size: 1, unit: lb}],
+     diet_flags: [vegetarian, gluten_free]}
+  - {id: parmesan, name: Grated parmesan, store_section: dairy, density_g_per_ml: 0.4, allergens: [milk],
+     purchase_packs: [{label: 5 lb tub, size: 5, unit: lb}, {label: 8 oz shaker, size: 8, unit: oz}],
+     diet_flags: [vegetarian, gluten_free]}
+  # ---- bakery
+  - {id: sandwich-bread, name: Sandwich bread, store_section: bakery, allergens: [wheat],
+     purchase_packs: [{label: loaf (20 slices), size: 20, unit: slice}],
+     diet_flags: [vegan]}
+  - {id: flour-tortilla, name: Large flour tortilla (10 in), store_section: bakery, allergens: [wheat],
+     purchase_packs: [{label: 72 ct case, size: 72, unit: each}, {label: 12 ct bag, size: 12, unit: each}],
+     diet_flags: [vegan]}
+  # ---- dry goods
+  - {id: flour, name: All-purpose flour, store_section: dry goods, density_g_per_ml: 0.53, allergens: [wheat],
+     purchase_packs: [{label: 25 lb bag, size: 25, unit: lb}, {label: 5 lb bag, size: 5, unit: lb}],
+     shelf_stable: true, diet_flags: [vegan]}
+  - {id: cornmeal, name: Yellow cornmeal, store_section: dry goods, density_g_per_ml: 0.64,
+     purchase_packs: [{label: 25 lb bag, size: 25, unit: lb}, {label: 24 oz box, size: 24, unit: oz}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: sugar, name: Granulated sugar, store_section: dry goods, density_g_per_ml: 0.85,
+     purchase_packs: [{label: 25 lb bag, size: 25, unit: lb}, {label: 4 lb bag, size: 4, unit: lb}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: brown-sugar, name: Brown sugar, store_section: dry goods, density_g_per_ml: 0.93,
+     purchase_packs: [{label: 25 lb bag, size: 25, unit: lb}, {label: 2 lb bag, size: 2, unit: lb}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: baking-powder, name: Baking powder, store_section: dry goods, density_g_per_ml: 0.9,
+     purchase_packs: [{label: 5 lb tub, size: 5, unit: lb}, {label: 10 oz can, size: 10, unit: oz}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: rolled-oats, name: Rolled oats, store_section: dry goods, density_g_per_ml: 0.34,
+     purchase_packs: [{label: 25 lb bag, size: 25, unit: lb}, {label: 42 oz canister, size: 42, unit: oz}],
+     shelf_stable: true, diet_flags: [vegan]}
+  - {id: spaghetti, name: Spaghetti (dry), store_section: dry goods, allergens: [wheat],
+     purchase_packs: [{label: 20 lb case, size: 20, unit: lb}, {label: 1 lb box, size: 1, unit: lb}],
+     shelf_stable: true, diet_flags: [vegan]}
+  - {id: ditalini, name: Ditalini pasta (dry), store_section: dry goods, allergens: [wheat],
+     purchase_packs: [{label: 20 lb case, size: 20, unit: lb}, {label: 1 lb box, size: 1, unit: lb}],
+     shelf_stable: true, diet_flags: [vegan]}
+  - {id: couscous, name: Couscous (dry), store_section: dry goods, density_g_per_ml: 0.72, allergens: [wheat],
+     purchase_packs: [{label: 25 lb bag, size: 25, unit: lb}, {label: 1 lb box, size: 1, unit: lb}],
+     shelf_stable: true, diet_flags: [vegan]}
+  - {id: dehydrated-veg, name: Dehydrated vegetable mix, store_section: dry goods, density_g_per_ml: 0.3,
+     purchase_packs: [{label: 2 lb pouch, size: 2, unit: lb}, {label: 8 oz pouch, size: 8, unit: oz}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: breadcrumbs, name: Breadcrumbs, store_section: dry goods, density_g_per_ml: 0.45, allergens: [wheat],
+     purchase_packs: [{label: 5 lb bag, size: 5, unit: lb}, {label: 15 oz canister, size: 15, unit: oz}],
+     shelf_stable: true, diet_flags: [vegan]}
+  - {id: raisins, name: Raisins, store_section: dry goods, density_g_per_ml: 0.65,
+     purchase_packs: [{label: 30 lb case, size: 30, unit: lb}, {label: 12 oz box, size: 12, unit: oz}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: peanut-butter, name: Peanut butter, store_section: dry goods, density_g_per_ml: 1.09, allergens: [peanut],
+     purchase_packs: [{label: 5 lb tub, size: 5, unit: lb}, {label: 16 oz jar, size: 16, unit: oz}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: sunflower-butter, name: Sunflower seed butter, store_section: dry goods, density_g_per_ml: 1.09,
+     purchase_packs: [{label: 5 lb tub, size: 5, unit: lb}, {label: 16 oz jar, size: 16, unit: oz}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free, nut_free]}
+  - {id: honey, name: Honey, store_section: dry goods, density_g_per_ml: 1.42,
+     purchase_packs: [{label: 5 lb jug, size: 5, unit: lb}, {label: 12 oz bear, size: 12, unit: oz}],
+     shelf_stable: true, diet_flags: [vegetarian, gluten_free]}
+  # ---- canned
+  - {id: kidney-beans, name: Kidney beans (canned), store_section: canned,
+     purchase_packs: [{label: '#10 can, 3000 g', size: 3000, unit: g}, {label: 15 oz can, size: 425, unit: g}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: black-beans, name: Black beans (canned), store_section: canned,
+     purchase_packs: [{label: '#10 can, 3000 g', size: 3000, unit: g}, {label: 15 oz can, size: 425, unit: g}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: crushed-tomatoes, name: Crushed tomatoes, store_section: canned, density_g_per_ml: 1.04,
+     purchase_packs: [{label: '#10 can, 3000 g', size: 3000, unit: g}, {label: 28 oz can, size: 794, unit: g}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: tomato-paste, name: Tomato paste, store_section: canned, density_g_per_ml: 1.1,
+     purchase_packs: [{label: '#10 can, 3000 g', size: 3000, unit: g}, {label: 6 oz can, size: 170, unit: g}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: salsa, name: Salsa, store_section: canned, density_g_per_ml: 1.05,
+     purchase_packs: [{label: '#10 can, 3000 g', size: 3000, unit: g}, {label: 16 oz jar, size: 454, unit: g}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: pickles, name: Dill pickle chips, store_section: canned,
+     purchase_packs: [{label: 1 gal jar, size: 8, unit: lb}, {label: 32 oz jar, size: 2, unit: lb}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: vegetable-broth, name: Vegetable broth, store_section: canned, density_g_per_ml: 1.0,
+     purchase_packs: [{label: 1 gal jug, size: 1, unit: gal}, {label: 32 oz carton, size: 1, unit: qt}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  # ---- frozen
+  - {id: frozen-corn, name: Frozen corn, store_section: frozen,
+     purchase_packs: [{label: 20 lb case, size: 20, unit: lb}, {label: 2.5 lb bag, size: 5/2, unit: lb}],
+     diet_flags: [vegan, gluten_free]}
+  # ---- spices
+  - {id: salt, name: Kosher salt, store_section: spices, density_g_per_ml: 1.2,
+     purchase_packs: [{label: 3 lb box, size: 3, unit: lb}, {label: 1 lb box, size: 1, unit: lb}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: black-pepper, name: Black pepper, store_section: spices, density_g_per_ml: 0.5,
+     purchase_packs: [{label: 16 oz tub, size: 16, unit: oz}, {label: 3 oz shaker, size: 3, unit: oz}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: chili-powder, name: Chili powder, store_section: spices, density_g_per_ml: 0.5,
+     purchase_packs: [{label: 16 oz tub, size: 16, unit: oz}, {label: 3 oz shaker, size: 3, unit: oz}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: cumin, name: Ground cumin, store_section: spices, density_g_per_ml: 0.45,
+     purchase_packs: [{label: 16 oz tub, size: 16, unit: oz}, {label: 2 oz jar, size: 2, unit: oz}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: italian-seasoning, name: Italian seasoning, store_section: spices, density_g_per_ml: 0.2,
+     purchase_packs: [{label: 6 oz tub, size: 6, unit: oz}, {label: 1 oz jar, size: 1, unit: oz}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: dried-basil, name: Dried basil, store_section: spices, density_g_per_ml: 0.15,
+     purchase_packs: [{label: 4 oz tub, size: 4, unit: oz}, {label: 1 oz jar, size: 1, unit: oz}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: rosemary, name: Dried rosemary, store_section: spices, density_g_per_ml: 0.2,
+     purchase_packs: [{label: 4 oz tub, size: 4, unit: oz}, {label: 1 oz jar, size: 1, unit: oz}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: cinnamon, name: Ground cinnamon, store_section: spices, density_g_per_ml: 0.56,
+     purchase_packs: [{label: 16 oz tub, size: 16, unit: oz}, {label: 2 oz jar, size: 2, unit: oz}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: bay-leaf, name: Bay leaf, store_section: spices,
+     purchase_packs: [{label: 100 ct bag, size: 100, unit: each}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  # ---- condiments
+  - {id: vegetable-oil, name: Vegetable oil, store_section: condiments, density_g_per_ml: 0.92,
+     purchase_packs: [{label: 1 gal jug, size: 1, unit: gal}, {label: 1 qt bottle, size: 1, unit: qt}],
+     shelf_stable: true, diet_flags: [vegan, gluten_free]}
+  - {id: mayo, name: Mayonnaise, store_section: condiments, density_g_per_ml: 0.91, allergens: [egg],
+     purchase_packs: [{label: 1 gal jug, size: 1, unit: gal}, {label: 30 oz jar, size: 30, unit: fl oz}],
+     diet_flags: [vegetarian, gluten_free]}
+  - {id: mustard, name: Yellow mustard, store_section: condiments, density_g_per_ml: 1.05,
+     purchase_packs: [{label: 1 gal jug, size: 1, unit: gal}, {label: 20 oz bottle, size: 20, unit: fl oz}],
+     diet_flags: [vegan, gluten_free]}
