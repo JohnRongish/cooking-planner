@@ -1,0 +1,9 @@
+{% if errors %}
+<div class="errors"><strong>Fix these first</strong><ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>
+{% else %}
+  {% set bad = warnings | selectattr('level', 'in', ['error', 'conflict']) | list %}
+  {% set soft = warnings | selectattr('level', 'in', ['warning']) | list %}
+  {% if bad %}<div class="errors"><strong>{{ bad | length }} problem{{ 's' if bad | length != 1 }}</strong><ul>{% for w in bad %}<li>{{ w.message }}</li>{% endfor %}</ul></div>{% endif %}
+  {% if soft %}<div class="warnbox"><strong>Heads up</strong><ul>{% for w in soft %}<li>{{ w.message }}</li>{% endfor %}</ul></div>{% endif %}
+  {% if not bad and not soft %}<div class="flash">Looks good: no equipment conflicts or warnings.</div>{% endif %}
+{% endif %}

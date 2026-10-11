@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}Kitchens{% endblock %}
+{% block content %}
+<h1>Kitchen profiles</h1>
+<div class="actions"><a class="btn primary" href="/kitchens/new">New kitchen profile</a></div>
+<table>
+  <thead><tr><th>Kitchen</th><th>Equipment</th><th>Cooks</th><th>Suits</th></tr></thead>
+  {% for k in kitchens %}
+  <tr><td><a href="/kitchens/{{ k.id }}/edit"><strong>{{ k.name }}</strong></a><br><small class="muted">{{ k.description }}</small></td>
+      <td>{% for e in k.equipment_inventory %}{{ e.count }} x {{ e.type | replace('_', ' ') }}{% if e.capacity %} ({{ e.capacity | amount }}){% endif %}{{ ', ' if not loop.last }}{% endfor %}</td>
+      <td>{{ k.max_cooks or 'any' }}</td><td>{% for t in k.supports_tags %}<span class="tag">{{ t }}</span>{% endfor %}</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

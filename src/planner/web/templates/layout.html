@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Event Kitchen Planner{% endblock %}</title>
+  <link rel="stylesheet" href="/static/app.css">
+  {% block head %}{% endblock %}
+  <script src="/static/htmx.min.js" defer></script>
+</head>
+<body>
+<header class="topbar no-print">
+  <a class="brand" href="/">Event Kitchen Planner</a>
+  <nav>
+    {% for href, label in [("/events", "Events"), ("/recipes", "Recipes"), ("/ingredients", "Ingredients"), ("/kitchens", "Kitchens"), ("/data", "Import / export")] %}
+      <a href="{{ href }}" class="{{ 'on' if path.startswith(href) else '' }}">{{ label }}</a>
+    {% endfor %}
+    {% if cfg.password %}
+      <form method="post" action="/logout" class="inline"><button class="link">Log out</button></form>
+    {% endif %}
+  </nav>
+</header>
+<main>
+  {% if msg %}<div class="flash no-print">{{ msg }}</div>{% endif %}
+  {% block content %}{% endblock %}
+</main>
+<footer class="no-print">Event Kitchen Planner {{ version }} &middot; planning only: print everything before the event.</footer>
+</body>
+</html>

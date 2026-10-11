@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block title %}Import / export{% endblock %}
+{% block content %}
+<h1>Import / export</h1>
+<p class="muted">Your recipes, ingredients, kitchens and events are plain YAML/JSON files. You are never locked in to the database.</p>
+{% if errors %}<div class="errors"><strong>Import failed; nothing was changed</strong><ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>{% endif %}
+<div class="card">
+  <h2 style="margin-top:0">Export</h2>
+  <p>{{ counts.recipes }} recipes, {{ counts.ingredients }} ingredients, {{ counts.kitchens }} kitchens, {{ counts.events }} events.</p>
+  <a class="btn primary" href="/export.yaml">Download everything (YAML)</a>
+  <a class="btn" href="/export.json">Download everything (JSON)</a>
+  <p class="muted">From the command line: <code>planner export /data/exports</code></p>
+</div>
+<div class="card">
+  <h2 style="margin-top:0">Import</h2>
+  <form method="post" action="/import" enctype="multipart/form-data">
+    <input type="file" name="file" accept=".yaml,.yml,.json" required>
+    <label style="margin-top:8px"><input type="checkbox" name="replace" value="1"> Replace everything (wipes the current data first)</label>
+    <div class="actions"><button class="primary">Import</button></div>
+  </form>
+  <p class="muted">Without "replace", items are added or updated by id. The file is checked completely before anything is written.</p>
+</div>
+<div class="card">
+  <h2 style="margin-top:0">Demo data</h2>
+  <form method="post" action="/seed"><label><input type="checkbox" name="replace" value="1"> Replace everything</label>
+    <div class="actions"><button>Load demo data</button></div></form>
+</div>
+{% endblock %}

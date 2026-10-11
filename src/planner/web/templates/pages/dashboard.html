@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Event Kitchen Planner</h1>
+<p class="muted">Pick meals from the recipe repository, set head counts, and print the shopping list, the timeline and the recipe sheets.</p>
+{% if counts.recipes == 0 %}
+<div class="card">
+  <strong>Nothing here yet.</strong> Load the demo data (13 recipes, 3 kitchens, a 120-person weekend) or import your own files.
+  <form method="post" action="/seed" class="actions"><button class="primary">Load demo data</button> <a class="btn" href="/data">Import files</a></form>
+</div>
+{% endif %}
+<div class="grid">
+  <div class="card"><strong>{{ counts.events }}</strong> events <a href="/events">open</a></div>
+  <div class="card"><strong>{{ counts.recipes }}</strong> recipes <a href="/recipes">open</a></div>
+  <div class="card"><strong>{{ counts.ingredients }}</strong> ingredients <a href="/ingredients">open</a></div>
+  <div class="card"><strong>{{ counts.kitchens }}</strong> kitchen profiles <a href="/kitchens">open</a></div>
+</div>
+{% if events %}
+<h2>Events</h2>
+<table>
+  <thead><tr><th>Event</th><th>Start</th><th>Days</th><th>Meals</th><th></th></tr></thead>
+  {% for e in events %}
+  <tr><td><a href="/events/{{ e.id }}/edit">{{ e.name }}</a></td><td>{{ e.start_date }}</td><td>{{ e.days }}</td><td>{{ e.meals | length }}</td>
+      <td><a class="btn primary" href="/events/{{ e.id }}/plan">Generate plan</a></td></tr>
+  {% endfor %}
+</table>
+{% endif %}
+{% endblock %}

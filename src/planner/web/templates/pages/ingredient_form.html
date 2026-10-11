@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% import "pages/_rows.html" as rows %}
+{% block title %}{{ 'New ingredient' if is_new else f.name }}{% endblock %}
+{% block content %}
+<h1>{{ 'New ingredient' if is_new else 'Edit ingredient' }}</h1>
+{% if errors %}<div class="errors"><strong>Could not save</strong><ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>{% endif %}
+{% if used_in %}<p class="muted">Used in: {{ used_in | join(', ') }}</p>{% endif %}
+<form method="post" action="{{ action }}">
+  <div class="card grid">
+    <div><label>Name</label><input name="name" value="{{ f.name }}" required></div>
+    <div><label>Id {% if not is_new %}(fixed){% endif %}</label><input name="id" value="{{ f.id }}" {{ 'readonly' if not is_new }} placeholder="auto from name"></div>
+    <div><label>Store section</label><input name="store_section" value="{{ f.store_section }}" list="sections"></div>
+    <div><label>Density (g per ml)</label><input name="density_g_per_ml" value="{{ f.density_g_per_ml }}" inputmode="decimal" placeholder="needed to mix cups and pounds"></div>
+    <div><label>Trim yield (0 to 1)</label><input name="trim_yield" value="{{ f.trim_yield }}" inputmode="decimal" placeholder="0.8 for onions"></div>
+    <div><label>Allergens</label><input name="allergens" value="{{ f.allergens }}" placeholder="milk, wheat"></div>
+    <div><label>Diet flags</label><input name="diet_flags" value="{{ f.diet_flags }}" placeholder="vegetarian, vegan, gluten_free"></div>
+    <div><label><input type="checkbox" name="shelf_stable" {{ 'checked' if f.shelf_stable }}> Shelf stable</label></div>
+  </div>
+  <datalist id="sections">{% for s in sections %}<option value="{{ s }}">{% endfor %}</datalist>
+  <h2>Purchase pack sizes</h2>
+  <p class="muted">The shopping list rounds up to these. Examples: #10 can = 3000 g; 50 lb bag = 50 lb; 1 gal jug = 1 gal.</p>
+  <div id="pack-rows">{% for p in f.packs %}{{ rows.pack_row(p, units) }}{% endfor %}</div>
+  <button type="button" hx-get="/ingredients/_row/pack" hx-target="#pack-rows" hx-swap="beforeend" hx-vals='js:{i: "n" + Date.now()}'>Add pack size</button>
+  <div class="actions"><button class="primary">Save ingredient</button><a class="btn" href="/ingredients">Back</a></div>
+</form>
+{% if not is_new %}
+<form method="post" action="/ingredients/{{ f.id }}/delete" onsubmit="return confirm('Delete this ingredient?')"><button class="danger">Delete</button></form>
+{% endif %}
+{% endblock %}

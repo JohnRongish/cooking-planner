@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block title %}{{ event.name }}: {{ gen.title }}{% endblock %}
+{% block head %}<link rel="stylesheet" href="/print.css?page={{ page }}">{% endblock %}
+{% block content %}
+<div class="no-print">
+  <h1>{{ event.name }}</h1>
+  <p class="muted"><a href="/events/{{ eid }}/edit">Edit event</a></p>
+  {% if conflicts %}
+  <div class="banner-alert"><strong>{{ conflicts | length }} conflict{{ 's' if conflicts | length != 1 }}:</strong> this plan needs more than the kitchen has.
+    <ul>{% for w in conflicts[:6] %}<li>{{ w.message }}</li>{% endfor %}</ul>{% if conflicts | length > 6 %}<small>and {{ conflicts | length - 6 }} more (see the timeline).</small>{% endif %}</div>
+  {% endif %}
+  <nav class="tabs">
+    {% for g in generators %}<a href="/events/{{ eid }}/plan/{{ g.id }}?page={{ page }}" class="{{ 'on' if g.id == gen.id }}" title="{{ g.description }}">{{ g.title }}</a>{% endfor %}
+  </nav>
+  <div class="actions">
+    <a class="btn primary" href="/events/{{ eid }}/plan/{{ gen.id }}/print?page={{ page }}" target="_blank">Print view</a>
+    <a class="btn" href="/events/{{ eid }}/plan/{{ gen.id }}/pdf?page={{ page }}">Download PDF</a>
+    {% if has_csv %}<a class="btn" href="/events/{{ eid }}/plan/{{ gen.id }}/csv">Download CSV</a>{% endif %}
+    <span class="muted">Page size:</span>
+    {% for size in ['Letter', 'A4'] %}<a class="btn {{ 'primary' if size == page }}" href="/events/{{ eid }}/plan/{{ gen.id }}?page={{ size }}">{{ size }}</a>{% endfor %}
+  </div>
+</div>
+<div class="plan-sheet doc">{{ fragment | safe }}</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% import "pages/_rows.html" as rows %}
+{% block title %}{{ 'New event' if is_new else f.name }}{% endblock %}
+{% block content %}
+<h1>{{ 'New event' if is_new else 'Edit event' }}</h1>
+{% if errors %}<div class="errors"><strong>Could not save</strong><ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>{% endif %}
+<form method="post" action="{{ action }}" hx-post="/events/_validate" hx-trigger="change, keyup delay:700ms" hx-target="#validation" hx-swap="innerHTML">
+  <div id="validation" aria-live="polite"></div>
+  <div class="card grid">
+    <div><label>Event name</label><input name="name" value="{{ f.name }}" required></div>
+    <div><label>Id {% if not is_new %}(fixed){% endif %}</label><input name="id" value="{{ f.id }}" {{ 'readonly' if not is_new }} placeholder="auto from name"></div>
+    <div><label>Kitchen profile</label>
+      <select name="kitchen_profile_id">{% for k in kitchens %}<option value="{{ k.id }}" {{ 'selected' if k.id == f.kitchen_profile_id }}>{{ k.name }}</option>{% endfor %}</select></div>
+    <div><label>Start date</label><input type="date" name="start_date" value="{{ f.start_date }}"></div>
+    <div><label>Days</label><input name="days" value="{{ f.days }}" inputmode="numeric"></div>
+    <div class="wide"><label>Notes</label><input name="notes" value="{{ f.notes }}"></div>
+  </div>
+  <h2>Meals</h2>
+  <div id="meal-rows">{% for m in f.meals %}{{ rows.meal_row(m, recipe_choices) }}{% endfor %}</div>
+  <button type="button" hx-get="/events/_row/meal" hx-target="#meal-rows" hx-swap="beforeend" hx-vals='js:{i: "n" + Date.now()}'>Add meal</button>
+  <h2>Pantry on hand</h2>
+  <p class="muted">Subtracted from the shopping list.</p>
+  <div id="pantry-rows">{% for p in f.pantry %}{{ rows.pantry_row(p, ingredients, units) }}{% endfor %}</div>
+  <button type="button" hx-get="/events/_row/pantry" hx-target="#pantry-rows" hx-swap="beforeend" hx-vals='js:{i: "n" + Date.now()}'>Add pantry item</button>
+  <div class="actions">
+    <button class="primary">Save event</button><a class="btn" href="/events">Back</a>
+    {% if not is_new %}<a class="btn primary" href="/events/{{ f.id }}/plan">Generate plan</a>{% endif %}
+  </div>
+</form>
+{% if not is_new %}
+<div class="actions">
+  <form method="post" action="/events/{{ f.id }}/duplicate" class="inline"><button>Duplicate</button></form>
+  <form method="post" action="/events/{{ f.id }}/delete" class="inline" onsubmit="return confirm('Delete this event?')"><button class="danger">Delete</button></form>
+</div>
+{% endif %}
+<script>document.addEventListener("DOMContentLoaded", function () { var f = document.querySelector("form[hx-post]"); if (f && window.htmx) { htmx.trigger(f, "change"); } });</script>
+{% endblock %}

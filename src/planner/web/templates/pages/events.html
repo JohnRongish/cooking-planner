@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}Events{% endblock %}
+{% block content %}
+<h1>Events</h1>
+<div class="actions"><a class="btn primary" href="/events/new">New event</a></div>
+<table>
+  <thead><tr><th>Event</th><th>Kitchen</th><th>Start</th><th>Days</th><th>Meals</th><th></th></tr></thead>
+  {% for e in events %}
+  <tr><td><a href="/events/{{ e.id }}/edit"><strong>{{ e.name }}</strong></a></td><td>{{ kitchens.get(e.kitchen_profile_id, e.kitchen_profile_id) }}</td>
+      <td>{{ e.start_date }}</td><td>{{ e.days }}</td><td>{{ e.meals | length }}</td>
+      <td><a class="btn primary" href="/events/{{ e.id }}/plan">Generate plan</a></td></tr>
+  {% else %}<tr><td colspan="6" class="muted">No events yet.</td></tr>{% endfor %}
+</table>
+{% endblock %}

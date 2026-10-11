@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% import "pages/_rows.html" as rows %}
+{% block title %}{{ 'New recipe' if is_new else f.name }}{% endblock %}
+{% block content %}
+<h1>{{ 'New recipe' if is_new else 'Edit recipe' }}</h1>
+{% if errors %}<div class="errors"><strong>Could not save</strong><ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>{% endif %}
+{% if used_in %}<p class="muted">Used by: {{ used_in | join(', ') }}</p>{% endif %}
+<form method="post" action="{{ action }}">
+  <div class="card grid">
+    <div><label>Name</label><input name="name" value="{{ f.name }}" required></div>
+    <div><label>Id {% if not is_new %}(fixed){% endif %}</label><input name="id" value="{{ f.id }}" {{ 'readonly' if not is_new }} placeholder="auto from name"></div>
+    <div><label>Base servings</label><input name="base_servings" value="{{ f.base_servings }}" inputmode="decimal"></div>
+    <div><label>One serving is</label><input name="portion_basis" value="{{ f.portion_basis }}" placeholder="1 cup"></div>
+    <div><label>Largest sensible batch (servings)</label><input name="max_batch_servings" value="{{ f.max_batch_servings }}" inputmode="decimal" placeholder="optional"></div>
+    <div><label>Tags (comma separated)</label><input name="tags" value="{{ f.tags }}" placeholder="bulk, one-pot, backpacking"></div>
+    <div><label>Diets this recipe satisfies</label><input name="diets" value="{{ f.diets }}" placeholder="vegetarian, gluten_free"></div>
+    <div><label>Variants for diets (diet=recipe-id)</label>
+      <input name="variants" value="{{ f.variants }}" placeholder="vegetarian=three-bean-chili" list="recipe-ids"></div>
+    <div class="wide"><label>Description</label><input name="description" value="{{ f.description }}"></div>
+    <div class="wide"><label>Scaling notes</label><input name="scaling_notes" value="{{ f.scaling_notes }}"></div>
+    <div class="wide"><label>Source</label><input name="source" value="{{ f.source }}"></div>
+  </div>
+  <datalist id="recipe-ids">{% for rid, rname in recipe_choices %}<option value="{{ rid }}">{{ rname }}</option>{% endfor %}</datalist>
+
+  <h2>Ingredients</h2>
+  <div id="ing-rows">
+    {% for r in f.ingredients %}{{ rows.ing_row(r, ingredients, units) }}{% endfor %}
+  </div>
+  <button type="button" hx-get="/recipes/_row/ingredient" hx-target="#ing-rows" hx-swap="beforeend" hx-vals='js:{i: "n" + Date.now()}'>Add ingredient</button>
+  {% if not ingredients %}<p class="muted">The ingredient catalog is empty. <a href="/ingredients/new">Add ingredients</a> first.</p>{% endif %}
+
+  <h2>Steps</h2>
+  <p class="muted">Time scaling: <em>none</em> (same time at any size), <em>sqrt</em> (e.g. bringing a bigger pot to a boil), <em>linear</em> (e.g. browning more batches). Steps that use sized equipment (pot@40) are copied once per batch.</p>
+  <div id="step-rows">
+    {% for s in f.steps %}{{ rows.step_row(s) }}{% endfor %}
+  </div>
+  <button type="button" hx-get="/recipes/_row/step" hx-target="#step-rows" hx-swap="beforeend" hx-vals='js:{i: "n" + Date.now()}'>Add step</button>
+
+  <div class="actions">
+    <button class="primary">Save recipe</button>
+    <a class="btn" href="/recipes">Back</a>
+  </div>
+</form>
+{% if not is_new %}
+<div class="actions">
+  <form method="post" action="/recipes/{{ f.id }}/duplicate" class="inline"><button>Duplicate</button></form>
+  <a class="btn" href="/recipes/{{ f.id }}.yaml">Export YAML</a>
+  <a class="btn" href="/recipes/{{ f.id }}.json">Export JSON</a>
+  <form method="post" action="/recipes/{{ f.id }}/delete" class="inline" onsubmit="return confirm('Delete this recipe?')"><button class="danger">Delete</button></form>
+</div>
+{% endif %}
+{% endblock %}

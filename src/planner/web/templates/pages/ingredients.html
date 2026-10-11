@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block title %}Ingredients{% endblock %}
+{% block content %}
+<h1>Ingredient catalog</h1>
+<form method="get" class="actions">
+  <input name="q" value="{{ q }}" placeholder="Search" style="max-width:240px">
+  <select name="section" style="max-width:200px"><option value="">all sections</option>{% for s in sections %}<option {{ 'selected' if s == section }}>{{ s }}</option>{% endfor %}</select>
+  <button>Filter</button><a class="btn primary" href="/ingredients/new">New ingredient</a>
+</form>
+<table>
+  <thead><tr><th>Ingredient</th><th>Section</th><th>Density g/ml</th><th>Trim yield</th><th>Packs</th></tr></thead>
+  {% for i in ingredients %}
+  <tr><td><a href="/ingredients/{{ i.id }}/edit">{{ i.name }}</a></td><td>{{ i.store_section }}</td>
+      <td>{{ i.density_g_per_ml | amount if i.density_g_per_ml else '' }}</td><td>{{ i.trim_yield | amount if i.trim_yield else '' }}</td>
+      <td><small>{{ i.purchase_packs | map(attribute='label') | join('; ') }}</small></td></tr>
+  {% else %}<tr><td colspan="5" class="muted">No ingredients.</td></tr>{% endfor %}
+</table>
+{% endblock %}

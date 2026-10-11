@@ -1,0 +1,106 @@
+{# Row macros shared by the editors and the HTMX "add row" endpoints. #}
+{% macro remove() %}<button type="button" class="danger" title="Remove" onclick="this.closest('.row').remove()">Remove</button>{% endmacro %}
+
+{% macro ing_row(r, ingredients, units) %}
+<div class="row ing-row">
+  <input type="hidden" name="ing_idx" value="{{ r.idx }}">
+  <div class="grow"><label>Ingredient</label>
+    <select name="ing_ingredient_id_{{ r.idx }}">
+      <option value="">- choose -</option>
+      {% for i in ingredients %}<option value="{{ i.id }}" {{ 'selected' if i.id == r.ingredient_id }}>{{ i.name }}</option>{% endfor %}
+      {% if r.ingredient_id and r.ingredient_id not in ingredients | map(attribute='id') | list %}<option value="{{ r.ingredient_id }}" selected>{{ r.ingredient_id }} (not in catalog)</option>{% endif %}
+    </select></div>
+  <div><label>Quantity</label><input name="ing_quantity_{{ r.idx }}" value="{{ r.quantity }}" placeholder="1 1/2"></div>
+  <div><label>Unit</label>
+    <select name="ing_unit_{{ r.idx }}">{% for u in units %}<option {{ 'selected' if u == r.unit }}>{{ u }}</option>{% endfor %}</select></div>
+  <div><label>Prep note</label><input name="ing_prep_note_{{ r.idx }}" value="{{ r.prep_note }}" placeholder="diced"></div>
+  <div><label>Scaling</label>
+    <select name="ing_scaling_{{ r.idx }}">{% for s in ['linear', 'fixed', 'stepped'] %}<option {{ 'selected' if s == r.scaling }}>{{ s }}</option>{% endfor %}</select></div>
+  <div><label>Step size (stepped)</label><input name="ing_step_size_{{ r.idx }}" value="{{ r.step_size }}" placeholder="1"></div>
+  <div>{{ remove() }}</div>
+</div>
+{% endmacro %}
+
+{% macro step_row(s) %}
+<div class="row step-row" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+  <input type="hidden" name="st_idx" value="{{ s.idx }}">
+  <div class="grow"><label>Step title</label><input name="st_title_{{ s.idx }}" value="{{ s.title }}"></div>
+  <div><label>Step id</label><input name="st_id_{{ s.idx }}" value="{{ s.id }}" placeholder="auto from title"></div>
+  <div><label>Duration (min)</label><input name="st_duration_min_{{ s.idx }}" value="{{ s.duration_min }}" inputmode="numeric"></div>
+  <div><label>Hands-on (min)</label><input name="st_active_min_{{ s.idx }}" value="{{ s.active_min }}" inputmode="numeric" placeholder="= duration"></div>
+  <div><label>Time scaling</label>
+    <select name="st_time_scaling_{{ s.idx }}">{% for t in ['none', 'sqrt', 'linear'] %}<option {{ 'selected' if t == s.time_scaling }}>{{ t }}</option>{% endfor %}</select></div>
+  <div><label>Depends on (step ids)</label><input name="st_depends_on_{{ s.idx }}" value="{{ s.depends_on }}" placeholder="chop, brown"></div>
+  <div class="grow"><label>Equipment (type, type*count, type@capacity)</label><input name="st_equipment_{{ s.idx }}" value="{{ s.equipment }}" placeholder="burner, pot@3"></div>
+  <div style="grid-column: 1 / -1"><label>Instructions</label><textarea name="st_instructions_{{ s.idx }}" rows="2">{{ s.instructions }}</textarea></div>
+  <details style="grid-column: 1 / -1"><summary>Make-ahead window, food-safety hold, batching</summary>
+    <div class="grid" style="margin-top:8px">
+      <div><label>Can end up to N min before serve</label><input name="st_earliest_offset_{{ s.idx }}" value="{{ s.earliest_offset }}" inputmode="numeric" placeholder="e.g. 2880 = 2 days"></div>
+      <div><label>Must end at least N min before serve</label><input name="st_latest_offset_{{ s.idx }}" value="{{ s.latest_offset }}" inputmode="numeric" placeholder="0"></div>
+      <div><label>Day offset (0 = serve day, -1 = day before)</label><input name="st_day_offset_{{ s.idx }}" value="{{ s.day_offset }}" inputmode="numeric" placeholder="none"></div>
+      <div><label>Hold at or above (F)</label><input name="st_hold_min_{{ s.idx }}" value="{{ s.hold_min }}" inputmode="decimal"></div>
+      <div><label>Hold at or below (F)</label><input name="st_hold_max_{{ s.idx }}" value="{{ s.hold_max }}" inputmode="decimal"></div>
+      <div><label>Max hold (min)</label><input name="st_hold_minutes_{{ s.idx }}" value="{{ s.hold_minutes }}" inputmode="numeric"></div>
+      <div><label>Cooks needed</label><input name="st_cooks_{{ s.idx }}" value="{{ s.cooks }}" inputmode="numeric" placeholder="1 if hands-on"></div>
+      <div><label>Copy per batch?</label>
+        <select name="st_per_batch_{{ s.idx }}">
+          <option value="" {{ 'selected' if not s.per_batch }}>auto (if it needs sized equipment)</option>
+          <option value="yes" {{ 'selected' if s.per_batch == 'yes' }}>yes</option><option value="no" {{ 'selected' if s.per_batch == 'no' }}>no</option></select></div>
+      <div><label><input type="checkbox" name="st_cooked_{{ s.idx }}" {{ 'checked' if s.cooked }}> Produces cooked food</label></div>
+      <div><label><input type="checkbox" name="st_can_parallelize_{{ s.idx }}" {{ 'checked' if s.can_parallelize }}> Batches may run in parallel</label></div>
+    </div>
+  </details>
+  <div>{{ remove() }}</div>
+</div>
+{% endmacro %}
+
+{% macro pack_row(r, units) %}
+<div class="row">
+  <input type="hidden" name="pk_idx" value="{{ r.idx }}">
+  <div class="grow"><label>Label</label><input name="pk_label_{{ r.idx }}" value="{{ r.label }}" placeholder="#10 can"></div>
+  <div><label>Size</label><input name="pk_size_{{ r.idx }}" value="{{ r.size }}" placeholder="3000"></div>
+  <div><label>Unit</label><select name="pk_unit_{{ r.idx }}">{% for u in units %}<option {{ 'selected' if u == r.unit }}>{{ u }}</option>{% endfor %}</select></div>
+  <div>{{ remove() }}</div>
+</div>
+{% endmacro %}
+
+{% macro equip_row(r) %}
+<div class="row">
+  <input type="hidden" name="eq_idx" value="{{ r.idx }}">
+  <div><label>Type</label><input name="eq_type_{{ r.idx }}" value="{{ r.type }}" placeholder="burner, oven, pot, pan, prep_table, fridge" list="equip-types"></div>
+  <div><label>Count</label><input name="eq_count_{{ r.idx }}" value="{{ r.count }}" inputmode="numeric"></div>
+  <div><label>Capacity (L / sheet pans)</label><input name="eq_capacity_{{ r.idx }}" value="{{ r.capacity }}" inputmode="decimal"></div>
+  <div class="grow"><label>Label</label><input name="eq_label_{{ r.idx }}" value="{{ r.label }}"></div>
+  <div>{{ remove() }}</div>
+</div>
+{% endmacro %}
+
+{% macro meal_row(r, recipe_choices) %}
+<div class="row meal-row" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
+  <input type="hidden" name="ml_idx" value="{{ r.idx }}">
+  <div><label>Day (0 = first)</label><input name="ml_day_{{ r.idx }}" value="{{ r.day }}" inputmode="numeric"></div>
+  <div><label>Meal</label><input name="ml_label_{{ r.idx }}" value="{{ r.label }}" placeholder="dinner"></div>
+  <div><label>Serve time</label><input name="ml_serve_time_{{ r.idx }}" value="{{ r.serve_time }}" placeholder="18:00"></div>
+  <div><label>Head count</label><input name="ml_headcount_{{ r.idx }}" value="{{ r.headcount }}" inputmode="numeric"></div>
+  <div><label>Portion factor</label><input name="ml_portion_factor_{{ r.idx }}" value="{{ r.portion_factor }}" placeholder="1"></div>
+  <div class="grow"><label>Diet splits (vegetarian=12, nut_free=5)</label><input name="ml_splits_{{ r.idx }}" value="{{ r.splits }}"></div>
+  <div style="grid-column: span 2"><label>Recipes (hold Ctrl/Cmd to pick several)</label>
+    <select name="ml_recipes_{{ r.idx }}" multiple size="5">
+      {% for rid, rname in recipe_choices %}<option value="{{ rid }}" {{ 'selected' if rid in r.recipe_ids }}>{{ rname }}</option>{% endfor %}
+      {% for rid in r.recipe_ids if rid not in (recipe_choices | map(attribute=0) | list) %}<option value="{{ rid }}" selected>{{ rid }} (missing)</option>{% endfor %}
+    </select></div>
+  <div>{{ remove() }}</div>
+</div>
+{% endmacro %}
+
+{% macro pantry_row(r, ingredients, units) %}
+<div class="row">
+  <input type="hidden" name="pa_idx" value="{{ r.idx }}">
+  <div class="grow"><label>Ingredient on hand</label>
+    <select name="pa_ingredient_id_{{ r.idx }}"><option value="">- choose -</option>
+      {% for i in ingredients %}<option value="{{ i.id }}" {{ 'selected' if i.id == r.ingredient_id }}>{{ i.name }}</option>{% endfor %}</select></div>
+  <div><label>Quantity</label><input name="pa_quantity_{{ r.idx }}" value="{{ r.quantity }}"></div>
+  <div><label>Unit</label><select name="pa_unit_{{ r.idx }}">{% for u in units %}<option {{ 'selected' if u == r.unit }}>{{ u }}</option>{% endfor %}</select></div>
+  <div>{{ remove() }}</div>
+</div>
+{% endmacro %}

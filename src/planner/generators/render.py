@@ -6,7 +6,7 @@ from collections.abc import Sequence
 from fractions import Fraction
 from pathlib import Path
 
-from jinja2 import ChoiceLoader, Environment, FileSystemLoader, select_autoescape
+from jinja2 import BaseLoader, ChoiceLoader, Environment, FileSystemLoader, select_autoescape
 
 from planner.core import units as u
 from planner.generators import base
@@ -16,10 +16,19 @@ def _fmt_qty(amount: Fraction, unit: str) -> str:
     return u.format_quantity(amount, unit)
 
 
+class _RegistryLoader(BaseLoader):
+    """Finds templates in every registered generator's folder, looked up at load time so
+    a generator registered after the environment was built still works."""
+
+    def get_source(self, environment, template):  # type: ignore[no-untyped-def]
+        return FileSystemLoader([str(p) for p in base.template_dirs()]).get_source(
+            environment, template
+        )
+
+
 def build_environment(extra_dirs: Sequence[Path] = ()) -> Environment:
-    paths = [str(p) for p in [*extra_dirs, *base.template_dirs()]]
     env = Environment(
-        loader=ChoiceLoader([FileSystemLoader(paths)]),
+        loader=ChoiceLoader([FileSystemLoader([str(p) for p in extra_dirs]), _RegistryLoader()]),
         autoescape=select_autoescape(["html", "xml"]),
         trim_blocks=True,
         lstrip_blocks=True,

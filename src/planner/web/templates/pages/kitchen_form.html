@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% import "pages/_rows.html" as rows %}
+{% block title %}{{ 'New kitchen' if is_new else f.name }}{% endblock %}
+{% block content %}
+<h1>{{ 'New kitchen profile' if is_new else 'Edit kitchen profile' }}</h1>
+{% if errors %}<div class="errors"><strong>Could not save</strong><ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>{% endif %}
+<form method="post" action="{{ action }}">
+  <div class="card grid">
+    <div><label>Name</label><input name="name" value="{{ f.name }}" required></div>
+    <div><label>Id {% if not is_new %}(fixed){% endif %}</label><input name="id" value="{{ f.id }}" {{ 'readonly' if not is_new }} placeholder="auto from name"></div>
+    <div><label>Cooks working at once</label><input name="max_cooks" value="{{ f.max_cooks }}" inputmode="numeric" placeholder="unlimited"></div>
+    <div><label>Working hours start</label><input name="work_start" value="{{ f.work_start }}" placeholder="06:00"></div>
+    <div><label>Working hours end</label><input name="work_end" value="{{ f.work_end }}" placeholder="22:00"></div>
+    <div class="wide"><label>Suits recipe tags (informational)</label><input name="supports_tags" value="{{ f.supports_tags }}" placeholder="bulk, camp, no-cook"></div>
+    <div class="wide"><label>Description</label><input name="description" value="{{ f.description }}"></div>
+  </div>
+  <datalist id="equip-types">{% for t in ['burner', 'oven', 'pot', 'pan', 'prep_table', 'fridge'] %}<option value="{{ t }}">{% endfor %}</datalist>
+  <h2>Equipment</h2>
+  <p class="muted">Capacity is litres for pots and pans, and sheet pans for ovens. Recipes ask for capacity (for example <code>pot@40</code>) and big recipes are split into batches when no single unit is large enough.</p>
+  <div id="eq-rows">{% for e in f.equipment %}{{ rows.equip_row(e) }}{% endfor %}</div>
+  <button type="button" hx-get="/kitchens/_row/equipment" hx-target="#eq-rows" hx-swap="beforeend" hx-vals='js:{i: "n" + Date.now()}'>Add equipment</button>
+  <div class="actions"><button class="primary">Save kitchen</button><a class="btn" href="/kitchens">Back</a></div>
+</form>
+{% if not is_new %}
+<form method="post" action="/kitchens/{{ f.id }}/delete" onsubmit="return confirm('Delete this kitchen profile?')"><button class="danger">Delete</button></form>
+{% endif %}
+{% endblock %}

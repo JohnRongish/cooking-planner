@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block title %}Recipes{% endblock %}
+{% block content %}
+<h1>Recipes</h1>
+<form method="get" class="actions">
+  <input name="q" value="{{ q }}" placeholder="Search recipes" style="max-width:280px">
+  {% if tag %}<input type="hidden" name="tag" value="{{ tag }}">{% endif %}
+  <button>Search</button>
+  <a class="btn primary" href="/recipes/new">New recipe</a>
+  <a class="btn" href="/data">Import / export</a>
+</form>
+<div class="chips">
+  <a href="/recipes" class="{{ '' if tag else 'on' }}">all</a>
+  {% for t in tags %}<a href="/recipes?tag={{ t }}" class="{{ 'on' if t == tag }}">{{ t }}</a>{% endfor %}
+</div>
+<table>
+  <thead><tr><th>Recipe</th><th>Tags</th><th>Serves</th><th>Steps</th><th></th></tr></thead>
+  {% for r in recipes %}
+  <tr>
+    <td><a href="/recipes/{{ r.id }}/edit"><strong>{{ r.name }}</strong></a><br><small class="muted">{{ r.description }}</small></td>
+    <td>{% for t in r.tags %}<a class="tag" href="/recipes?tag={{ t }}">{{ t }}</a>{% endfor %}</td>
+    <td>{{ r.base_servings | amount }}{% if r.max_batch_servings %}<br><small class="muted">max batch {{ r.max_batch_servings | amount }}</small>{% endif %}</td>
+    <td>{{ r.steps | length }}</td>
+    <td class="actions" style="margin:0">
+      <form method="post" action="/recipes/{{ r.id }}/duplicate" class="inline"><button>Duplicate</button></form>
+      <a class="btn" href="/recipes/{{ r.id }}.yaml">YAML</a>
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="5" class="muted">No recipes match.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}
