@@ -169,7 +169,7 @@ equipment and pack weight are in `generators/_stubs/`.
 ```bash
 python -m venv .venv && . .venv/bin/activate
 pip install -e ".[dev]"
-ruff check . && ruff format --check .
+ruff check src tests && ruff format --check src tests
 mypy src                 # strict on planner.core
 pytest                   # core coverage gate is 90%
 planner serve
