@@ -1,0 +1,42 @@
+<section class="gen recipes">
+  {% for s in data.sheets %}
+  <article class="sheet page-break-before">
+    <h2>{{ s.title }}</h2>
+    <p class="meta">{{ s.meal }} &middot; serve {{ s.serve }} &middot; {{ s.people }} people &middot;
+       {{ s.servings }} servings{% if s.portion_basis %} ({{ s.portion_basis }} each){% endif %}
+       {% if s.diets %} &middot; for: {{ s.diets }}{% endif %}</p>
+    <p class="batch"><strong>{{ s.batch_statement }}</strong>{% if s.batch_reasons %} <small>({{ s.batch_reasons }})</small>{% endif %}</p>
+    {% if s.description %}<p>{{ s.description }}</p>{% endif %}
+    {% if s.allergens %}<p class="warn">Contains: {{ s.allergens | join(', ') }}</p>{% endif %}
+    <h3>Ingredients</h3>
+    <table class="ing">
+      <thead><tr><th>Ingredient</th><th>Total</th>{% if s.batch_statement != 'Make 1 batch' %}<th>Per batch</th>{% endif %}<th>Notes</th></tr></thead>
+      <tbody>
+      {% for i in s.ingredients %}
+        <tr><td>{{ i.name }}</td><td>{{ i.amount }}</td>
+        {% if s.batch_statement != 'Make 1 batch' %}<td>{{ i.per_batch }}</td>{% endif %}
+        <td>{{ i.prep_note }}{% if i.note %} <small>({{ i.note }})</small>{% endif %}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <h3>Method</h3>
+    <ol class="method">
+      {% for st in s.steps %}
+      <li><strong>{{ st.title }}</strong>
+        {% if st.minutes %}<small> &middot; {{ st.minutes }}</small>{% endif %}
+        {% if st.instructions %}<br>{{ st.instructions }}{% endif %}
+        {% if st.batch_note %}<br><em>{{ st.batch_note }}</em>{% endif %}
+        {% if st.hold %}<br><em>{{ st.hold }}</em>{% endif %}
+        {% if st.equipment %}<br><small>Equipment: {{ st.equipment }}</small>{% endif %}
+        {% if st.when %}<br><small>Planned: {{ st.when }}</small>{% endif %}
+      </li>
+      {% endfor %}
+    </ol>
+    {% if s.scaling_notes %}<p><strong>Scaling notes:</strong> {{ s.scaling_notes }}</p>{% endif %}
+    {% if s.equipment %}<p><small>Equipment: {{ s.equipment | join(', ') }}</small></p>{% endif %}
+    {% if s.source %}<p><small>Source: {{ s.source }}</small></p>{% endif %}
+  </article>
+  {% else %}
+  <p>No recipes in this plan.</p>
+  {% endfor %}
+</section>

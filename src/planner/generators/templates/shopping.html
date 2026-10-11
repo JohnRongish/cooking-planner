@@ -1,0 +1,29 @@
+<section class="gen shopping">
+  <h2>Shopping list</h2>
+  <p class="meta">{{ plan.event.name }} &middot; {{ plan.meals | length }} meals &middot;
+     {{ plan.clock.day_label(0) }}</p>
+  {% for w in data.warnings %}<p class="warn">{{ w }}</p>{% endfor %}
+  {% for n in data.notes %}<p class="warn">{{ n }}</p>{% endfor %}
+  {% for sec in data.sections %}
+  <table class="shop avoid-break">
+    <caption>{{ sec.name | title }}</caption>
+    <thead><tr><th class="chk"></th><th>Item</th><th>Needed in recipes</th><th>To purchase</th>
+      <th>Packs</th><th>Left over</th><th>Used in</th></tr></thead>
+    <tbody>
+    {% for ln in sec.lines %}
+      <tr>
+        <td class="chk"><span class="box"></span></td>
+        <td><strong>{{ ln.name }}</strong>{% for n in ln.notes %}<br><small>{{ n }}</small>{% endfor %}</td>
+        <td>{{ ln.needed }}</td>
+        <td>{{ ln.to_buy }}{% if ln.pantry %}<br><small>pantry covers {{ ln.pantry }}</small>{% endif %}</td>
+        <td>{{ ln.pack_text }}</td>
+        <td>{{ ln.leftover }}</td>
+        <td><small>{{ ln.used_in }}</small></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>Nothing to buy.</p>
+  {% endfor %}
+</section>
