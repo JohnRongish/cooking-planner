@@ -1,0 +1,63 @@
+schema_version: 1
+kind: planner-bundle
+ingredients:
+  - id: onion
+    name: Yellow onion
+    store_section: produce
+    density_g_per_ml: 0.6
+    trim_yield: 0.9
+    purchase_packs:
+      - {label: 50 lb bag, size: 50, unit: lb}
+      - {label: 3 lb bag, size: 3, unit: lb}
+    allergens: []
+    diet_flags: [vegan, gluten_free]
+    shelf_stable: true
+    extras: {aisle_note: "back wall"}
+  - id: rice
+    name: Rice
+    store_section: dry goods
+    density_g_per_ml: "0.85"
+    purchase_packs:
+      - {label: 25 lb bag, size: 25, unit: lb}
+recipes:
+  - id: rice-and-onions
+    name: Rice and onions
+    tags: [bulk, vegetarian]
+    base_servings: 10
+    portion_basis: 1 cup
+    max_batch_servings: 60
+    ingredients:
+      - {ingredient_id: onion, quantity: "2 1/2", unit: cup, prep_note: diced}
+      - {ingredient_id: rice, quantity: 1/3, unit: lb}
+    steps:
+      - id: chop
+        title: Dice onions
+        duration_min: 20
+        equipment: [{type: prep_table}]
+      - id: cook
+        title: Cook rice
+        duration_min: 30
+        active_min: 5
+        time_scaling: sqrt
+        depends_on: [chop]
+        equipment: [{type: burner}, {type: pot, capacity_hint: 6}]
+        cooked: true
+    extras: {future_field: [1, 2, 3]}
+kitchens:
+  - id: tiny
+    name: Tiny kitchen
+    equipment_inventory:
+      - {type: burner, count: 2}
+      - {type: pot, count: 1, capacity: 20}
+    max_cooks: 2
+    supports_tags: [bulk]
+events:
+  - id: demo
+    name: Demo
+    kitchen_profile_id: tiny
+    start_date: 2025-06-06
+    days: 1
+    meals:
+      - {day: 0, label: dinner, serve_time: "18:00", recipe_ids: [rice-and-onions], headcount: 25}
+    pantry_on_hand:
+      - {ingredient_id: rice, quantity: 2, unit: lb}
