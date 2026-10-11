@@ -1,0 +1,18 @@
+services:
+  planner:
+    image: ghcr.io/OWNER/REPO:latest   # replace OWNER/REPO (lowercase), or pin a version tag such as :v0.1.0
+    container_name: kitchen-planner
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      PLANNER_DATA_DIR: /data
+      PLANNER_PAGE_SIZE: Letter        # or A4
+      # PLANNER_PASSWORD: change-me     # optional single shared password
+      # PLANNER_BASE_URL: https://planner.example.lan
+    volumes:
+      - planner-data:/data             # or a host path, e.g. /mnt/tank/apps/planner:/data
+    user: "568:568"                    # must be able to write to /data
+
+volumes:
+  planner-data:

@@ -17,6 +17,22 @@ from planner.web.common import STATIC_DIR, TEMPLATE_DIR, VERSION
 from planner.web.routes import catalog, data, events, plan, recipes
 
 
+def prepare_data_dir(cfg: AppConfig) -> None:
+    """Create the data folders, failing with a readable hint if they are not writable."""
+    try:
+        cfg.data_dir.mkdir(parents=True, exist_ok=True)
+        cfg.export_dir.mkdir(parents=True, exist_ok=True)
+        probe = cfg.data_dir / ".write-test"
+        probe.write_text("ok")
+        probe.unlink()
+    except OSError as exc:
+        raise SystemExit(
+            f"Cannot write to the data folder {cfg.data_dir}: {exc}. "
+            "Give the user the app runs as (uid 568 in the Docker image) write access to it; "
+            "on TrueNAS SCALE check the dataset's ACL."
+        ) from exc
+
+
 def create_app(config: AppConfig | None = None) -> FastAPI:
     cfg = config or AppConfig.from_env()
 
@@ -35,8 +51,7 @@ def create_app(config: AppConfig | None = None) -> FastAPI:
     app.state.cfg = cfg
     base.discover()
     app.state.env = build_environment([TEMPLATE_DIR])
-    cfg.data_dir.mkdir(parents=True, exist_ok=True)
-    cfg.export_dir.mkdir(parents=True, exist_ok=True)
+    prepare_data_dir(cfg)
     run_migrations(cfg.db_url)  # at startup, so a fresh empty /data is migrated before serving
     app.state.engine = make_engine(cfg.db_url)
     if cfg.password:
