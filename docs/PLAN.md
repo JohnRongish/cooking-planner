@@ -1,6 +1,6 @@
 # Build Plan
 
-Status: DRAFT for approval. No code is written until this is approved.
+Status: APPROVED and implemented (M0-M7). Milestone notes below record what was built.
 
 Each milestone is independently testable, ends green on `ruff`, `mypy`, and
 `pytest`, and is committed in small steps. `CHANGELOG.md` gets an entry per

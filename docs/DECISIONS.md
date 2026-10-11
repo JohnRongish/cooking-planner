@@ -14,3 +14,11 @@ while building are appended here with the milestone that introduced them.
 | D41 | M4 | Pack rounding score = `leftover / need + packs / 20` (exact Fractions); ties go to fewer packs, then larger packs first. At most 4 pack sizes per ingredient are searched. |
 | D42 | M4 | Generators carry their own templates; the registry exposes template directories so the web layer needs no edits when a generator is added. |
 | D43 | M3 | `Step.per_batch` (optional bool) overrides batch-copy inference; `can_parallelize_batches=False` chains batch copies of that step in sequence. |
+| D44 | M6 | **Batch counts are per step, not per recipe.** Each per-batch step gets `max(ceil(servings / max_batch_servings), copies needed so its capacity_hint fits the largest unit)`. The recipe-level "Make N batches" headline is the largest of them. A sauce that fits one pot is not copied just because the meatballs need four oven loads. Supersedes the "one N per recipe" wording of D6/D7. |
+| D45 | M6 | A step that wants more cooks than `max_cooks` uses all the cooks the kitchen has and keeps its duration; an `info` note says it will take longer than shown. (Otherwise the same recipe could not run in a one-cook backpacking kitchen.) |
+| D46 | M6 | Equipment units are exclusive: a step that needs a 2.4 sheet-pan load still occupies one whole oven. `capacity_hint` decides which units qualify and how many batches are needed, it does not pack several steps into one unit. |
+| D47 | M5 | HTMX 1.9.12 (0BSD) is vendored into `web/static/`; no CDN and no Node build. Editors post rows as `<prefix>_<field>_<idx>` so checkboxes stay aligned with rows when rows are added or removed. |
+| D48 | M5 | Print views, PDF and the on-screen preview share `print.css`. WeasyPrint margin boxes carry the page footer and, for a timeline with conflicts, a red banner on every page. Browsers that ignore margin boxes still show the banner on page 1. |
+| D49 | M5 | The seed command and button load demo data explicitly; the database starts empty (SPEC question 2). |
+| D50 | M7 | The image runs as uid/gid 568 (TrueNAS `apps`), sets `HOME` and `XDG_CACHE_HOME` under `/data`, and `main` builds amd64 only while `v*` tags also build arm64 (QEMU is slow) (SPEC D33). |
+| D51 | M7 | CI lints `src` and `tests` only; `docs/` contains illustrative snippets that `ruff format` would rewrite. |

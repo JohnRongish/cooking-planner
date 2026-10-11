@@ -11,3 +11,5 @@ All notable changes. Format: Keep a Changelog; versions follow semver once tagge
 - M4: generator registry with auto-discovery, shopping list (pack rounding, pantry, CSV), timeline (by day and station), recipe sheets, stubs, docs/ADDING_A_GENERATOR.md.
 - M6: seed data (55 ingredients, 13 recipes, 3 kitchens, 2 demo events), `planner` CLI (export/import/seed/migrate/plan/serve), print CSS, acceptance tests.
 - Per-step batch counts, cooks clamped to the kitchen's max_cooks.
+- M5: web UI (recipes, ingredients, kitchens, events with live validation, plan tabs with print/PDF/CSV, import/export, optional password).
+- M7: Dockerfile (non-root, /data volume, healthcheck), smoke test script, CI and GHCR publish workflows, README with TrueNAS SCALE instructions.
