@@ -1,6 +1,7 @@
 # Event Kitchen Planner: Specification (draft for approval)
 
-Status: DRAFT v0.1. Awaiting user approval before PLAN.md or any code.
+Status: DRAFT v0.2. Awaiting user approval before PLAN.md or any code.
+Open-question answers so far: Q1 (US customary display default) APPROVED.
 
 ## 1. Purpose
 
@@ -77,7 +78,7 @@ Event, KitchenProfile for symmetry).
 
 | # | Topic | Decision |
 |---|-------|----------|
-| D1 | Python version | Target 3.12+. Docker uses 3.12-slim. (Sandbox has 3.13; both tested in CI matrix? No: CI uses 3.12 only, to keep it simple.) |
+| D1 | Python version | Target 3.12+. Docker and CI use 3.12 only, to keep things simple. |
 | D2 | Pydantic | Core models are pydantic v2 (validation + YAML round trip). Not dataclasses. |
 | D3 | Step IDs / refs | Step ids are unique within a recipe; `depends_on` is within-recipe only. Cross-recipe deps are not supported in v1. |
 | D4 | Anchors | Every step is scheduled relative to its **meal's serve time**. `earliest_offset`/`latest_offset` (minutes before serve end of step) bound the window; `day_offset` forces the step onto day (serve_day + offset, offset <= 0) with time chosen by the scheduler within that day. |
