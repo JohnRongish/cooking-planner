@@ -4,7 +4,7 @@
 {% block content %}
 <h1>{{ 'New event' if is_new else 'Edit event' }}</h1>
 {% if errors %}<div class="errors"><strong>Could not save</strong><ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>{% endif %}
-<form method="post" action="{{ action }}" hx-post="/events/_validate" hx-trigger="change, keyup delay:700ms" hx-target="#validation" hx-swap="innerHTML">
+<form method="post" action="{{ action }}" hx-post="/events/_validate" hx-trigger="load, change, keyup delay:700ms" hx-target="#validation" hx-swap="innerHTML">
   <div id="validation" aria-live="polite"></div>
   <div class="card grid">
     <div><label>Event name</label><input name="name" value="{{ f.name }}" required></div>
@@ -33,5 +33,5 @@
   <form method="post" action="/events/{{ f.id }}/delete" class="inline" onsubmit="return confirm('Delete this event?')"><button class="danger">Delete</button></form>
 </div>
 {% endif %}
-<script>document.addEventListener("DOMContentLoaded", function () { var f = document.querySelector("form[hx-post]"); if (f && window.htmx) { htmx.trigger(f, "change"); } });</script>
+
 {% endblock %}

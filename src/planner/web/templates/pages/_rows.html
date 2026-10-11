@@ -13,7 +13,7 @@
   <div><label>Quantity</label><input name="ing_quantity_{{ r.idx }}" value="{{ r.quantity }}" placeholder="1 1/2"></div>
   <div><label>Unit</label>
     <select name="ing_unit_{{ r.idx }}">{% for u in units %}<option {{ 'selected' if u == r.unit }}>{{ u }}</option>{% endfor %}</select></div>
-  <div><label>Prep note</label><input name="ing_prep_note_{{ r.idx }}" value="{{ r.prep_note }}" placeholder="diced"></div>
+  <div><label>Prep note</label><input name="ing_prep_note_{{ r.idx }}" value="{{ r.prep_note }}" placeholder="e.g. diced"></div>
   <div><label>Scaling</label>
     <select name="ing_scaling_{{ r.idx }}">{% for s in ['linear', 'fixed', 'stepped'] %}<option {{ 'selected' if s == r.scaling }}>{{ s }}</option>{% endfor %}</select></div>
   <div><label>Step size (stepped)</label><input name="ing_step_size_{{ r.idx }}" value="{{ r.step_size }}" placeholder="1"></div>
@@ -84,11 +84,11 @@
   <div><label>Head count</label><input name="ml_headcount_{{ r.idx }}" value="{{ r.headcount }}" inputmode="numeric"></div>
   <div><label>Portion factor</label><input name="ml_portion_factor_{{ r.idx }}" value="{{ r.portion_factor }}" placeholder="1"></div>
   <div class="grow"><label>Diet splits (vegetarian=12, nut_free=5)</label><input name="ml_splits_{{ r.idx }}" value="{{ r.splits }}"></div>
-  <div style="grid-column: span 2"><label>Recipes (hold Ctrl/Cmd to pick several)</label>
-    <select name="ml_recipes_{{ r.idx }}" multiple size="5">
-      {% for rid, rname in recipe_choices %}<option value="{{ rid }}" {{ 'selected' if rid in r.recipe_ids }}>{{ rname }}</option>{% endfor %}
-      {% for rid in r.recipe_ids if rid not in (recipe_choices | map(attribute=0) | list) %}<option value="{{ rid }}" selected>{{ rid }} (missing)</option>{% endfor %}
-    </select></div>
+  <div style="grid-column: 1 / -1"><label>Recipes served at this meal</label>
+    <div class="checks">
+      {% for rid, rname in recipe_choices %}<label class="check"><input type="checkbox" name="ml_recipes_{{ r.idx }}" value="{{ rid }}" {{ 'checked' if rid in r.recipe_ids }}> {{ rname }}</label>{% endfor %}
+      {% for rid in r.recipe_ids if rid not in (recipe_choices | map(attribute=0) | list) %}<label class="check"><input type="checkbox" name="ml_recipes_{{ r.idx }}" value="{{ rid }}" checked> {{ rid }} (missing)</label>{% endfor %}
+    </div></div>
   <div>{{ remove() }}</div>
 </div>
 {% endmacro %}

@@ -58,3 +58,6 @@ form.inline { display: inline; }
 details > summary { cursor: pointer; color: var(--muted); font-size: 13px; margin: 4px 0; }
 @media print { .no-print { display: none !important; } body { background: #fff; } main { max-width: none; padding: 0; } .plan-sheet { border: 0; padding: 0; } }
 @media (max-width: 640px) { .grid, .row { grid-template-columns: 1fr; } .row .grow { grid-column: auto; } }
+
+.checks { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 2px 14px; max-height: 190px; overflow: auto; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); }
+label.check { display: flex; gap: 6px; align-items: center; color: var(--ink); font-size: 14px; margin: 0; }
